@@ -86,6 +86,7 @@ public class Consumer {
             }
         }
         return null;
+
     }
 
     public Connection getConn() {

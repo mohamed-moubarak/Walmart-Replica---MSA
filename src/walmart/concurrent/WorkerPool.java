@@ -10,7 +10,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 IN THE SOFTWARE.
 */
 
-package edumsg.concurrent;
+package walmart.concurrent;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
