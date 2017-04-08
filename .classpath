@@ -16,6 +16,12 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/mohamed-moubarak/Desktop/postgresql-42.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mohab/OneDrive/Documents/Scalable Apps/Netty-Starter/libs/boon-0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mohab/OneDrive/Documents/Scalable Apps/Netty-Starter/libs/HikariCP-java6-2.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mohab/OneDrive/Documents/Scalable Apps/Netty-Starter/libs/javassist.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mohab/OneDrive/Documents/Scalable Apps/Netty-Starter/libs/netty-all-5.0.0.Alpha2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mohab/OneDrive/Documents/Scalable Apps/Netty-Starter/libs/postgresql-9.3-1102.jdbc41.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mohab/OneDrive/Documents/Scalable Apps/Netty-Starter/libs/slf4j-api-1.7.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mohab/OneDrive/Documents/Scalable Apps/Netty-Starter/libs/slf4j-jdk14-1.7.10.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
