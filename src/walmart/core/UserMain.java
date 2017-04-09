@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AdminMain extends RunnableClasses{
-    private static final Logger LOGGER = Logger.getLogger(AdminMain.class.getName());
+public class UserMain extends RunnableClasses{
+    private static final Logger LOGGER = Logger.getLogger(UserMain.class.getName());
     private static WorkerPool pool = new WorkerPool();
     private static boolean run = true;
 
@@ -37,7 +37,7 @@ public class AdminMain extends RunnableClasses{
       //  UserCache.userBgSave();
         Consumer c = null;
         try {
-            c = new Consumer(new ActiveMQConfig("Admin.INQUEUE"));
+            c = new Consumer(new ActiveMQConfig("User.INQUEUE"));
 
             while (run) {
                 Message msg = c.receive();
@@ -47,7 +47,7 @@ public class AdminMain extends RunnableClasses{
                 }
                 if (msg instanceof TextMessage) {
                     String msgTxt = ((TextMessage) msg).getText();
-                    handleMsg(msgTxt, msg.getJMSCorrelationID(),"admin",LOGGER,pool);
+                    handleMsg(msgTxt, msg.getJMSCorrelationID(),"user",LOGGER,pool);
                 }
             }
         }
