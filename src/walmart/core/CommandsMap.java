@@ -1,7 +1,7 @@
 package walmart.core;
 
 
-import walmart.core.commands.admin.CreateNewProductCommand;
+import walmart.core.commands.admin.GetUsersCommand;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -12,7 +12,7 @@ public class CommandsMap {
 //Each new function you create, you must add it below
     public static void instantiate() {
         cmdMap = new ConcurrentHashMap<>();
-         cmdMap.put("CreateNewProduct", CreateNewProductCommand.class);
+         cmdMap.put("GetUser",  GetUsersCommand.class);
     }
 
     public static Class<?> queryClass(String cmd) {
