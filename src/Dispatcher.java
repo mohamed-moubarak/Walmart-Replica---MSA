@@ -346,8 +346,19 @@ public class Dispatcher{
     }
 
     public void init( ) throws Exception{
-        loadHikari( "127.0.0.1", 5432, "database_name", "user_name", "user_password");
+        Properties prop = new Properties();
+        InputStream in  = getClass().getResourceAsStream("config/database.properties");
+        prop.load( in );
+        in.close( );
+
+        String host = prop.getProperty("host");
+        int port = Integer.parseInt(prop.getProperty("port"));
+        String database = prop.getProperty("database");
+        String user = prop.getProperty("user");
+        String password = prop.getProperty("password");
+
+        loadHikari( host, port, database, user, password );
         loadThreadPool( );
         loadCommands( );
-    }  
+    }
 }
