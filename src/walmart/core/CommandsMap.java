@@ -1,7 +1,6 @@
 package walmart.core;
 
 
-import walmart.core.User;
 import walmart.core.commands.admin.CreateNewProductCommand;
 
 import java.util.concurrent.ConcurrentHashMap;
