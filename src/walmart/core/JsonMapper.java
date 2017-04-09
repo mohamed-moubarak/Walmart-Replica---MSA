@@ -10,18 +10,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 IN THE SOFTWARE.
 */
 
-package walmart.core.commands.admin;
+package walmart.core;
 
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class MyObjectMapper extends ObjectMapper {
-	public MyObjectMapper() {
-		super();
-		this.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-		this.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-	}
+import java.io.IOException;
+import java.util.HashMap;
+
+public class JsonMapper {
+    private String json;
+
+    public JsonMapper(String json) {
+        this.json = json;
+    }
+
+    public HashMap<String, String> deserialize() throws
+            IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(json,
+                new TypeReference<HashMap<String, String>>() {
+                });
+    }
 }

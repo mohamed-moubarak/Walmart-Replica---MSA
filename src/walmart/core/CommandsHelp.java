@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import walmart.activemq.ActiveMQConfig;
 import walmart.activemq.Producer;
-import walmart.core.commands.admin.MyObjectMapper;
+import walmart.core.MyObjectMapper;
 
 import java.io.IOException;
 import java.util.logging.Logger;

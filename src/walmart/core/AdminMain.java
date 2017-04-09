@@ -10,7 +10,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 IN THE SOFTWARE.
 */
 
-package walmart.core.commands.admin;
+package walmart.core;
 
 import walmart.activemq.ActiveMQConfig;
 import walmart.activemq.Consumer;

@@ -1,4 +1,4 @@
-package walmart.core.commands.admin;
+package walmart.core;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
