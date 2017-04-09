@@ -10,10 +10,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 IN THE SOFTWARE.
 */
 
-package edumsg.netty;
+package walmart.netty;
 
-import edumsg.activemq.ActiveMQConfig;
-import edumsg.activemq.Consumer;
+import walmart.activemq.ActiveMQConfig;
+import walmart.activemq.Consumer;
 
 import javax.jms.JMSException;
 import javax.jms.Message;

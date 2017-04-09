@@ -1,6 +1,7 @@
 package walmart.core.commands.user;
 
 import java.sql.Statement;
+import java.util.Properties;
 
 import walmart.core.Command;
 import walmart.core.PostgresConnection;
@@ -9,13 +10,13 @@ public class CreateNewUserCommand extends Command implements Runnable {
 
 	@Override
 	public void execute() {
-		PostgresConnection.setDB_HOST("localhost"); // set host, Default: "localhost"
-		PostgresConnection.setDB_NAME("walmartpostgreSQLDB"); // set database name
-		PostgresConnection.setDB_PASSWORD(""); // set database password
-		PostgresConnection.setDB_PORT("5432"); // set port number, Default:"5432"
-		PostgresConnection.setDB_SCHEMA("public"); // set database schema, Default(probably,not sure): public
-		PostgresConnection.setDB_USERNAME("postgres"); // set database username, Default: "postgres"
-		dbConn = PostgresConnection.connect();
+		PostgresConnection.setDBHost("localhost"); // set host, Default: "localhost"
+		PostgresConnection.setDBName("walmartpostgreSQLDB"); // set database name
+		PostgresConnection.setDBPassword(""); // set database password
+		PostgresConnection.setDBPort("5432"); // set port number, Default:"5432"
+		//PostgresConnection.setDB_SCHEMA("public"); // set database schema, Default(probably,not sure): public
+		PostgresConnection.setDBName("postgres"); // set database username, Default: "postgres"
+		dbConn = PostgresConnection.initSource();
 		
 		Statement stmt = null;
 		try {

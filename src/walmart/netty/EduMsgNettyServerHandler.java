@@ -10,10 +10,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 IN THE SOFTWARE.
 */
 
-package edumsg.netty;
+package walmart.netty;
 
-import edumsg.activemq.ActiveMQConfig;
-import edumsg.activemq.Producer;
+import walmart.activemq.ActiveMQConfig;
+import walmart.activemq.Producer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

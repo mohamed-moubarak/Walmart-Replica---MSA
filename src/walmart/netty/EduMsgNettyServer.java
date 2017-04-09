@@ -10,9 +10,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 IN THE SOFTWARE.
 */
 
-package edumsg.netty;
+package walmart.netty;
 
-import edumsg.redis.EduMsgRedis;
+//import edumsg.redis.EduMsgRedis;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -34,7 +34,7 @@ public class EduMsgNettyServer {
     public static void main(String[] args) throws Exception {
         Logger log = Logger.getLogger(EduMsgNettyServer.class);
         // Configure SSL.
-        EduMsgRedis.redisCache.flushDB();
+  //      EduMsgRedis.redisCache.flushDB();
 //        EduMsgRedis.bgSave();
         final SslContext sslCtx;
         if (SSL) {
