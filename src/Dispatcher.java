@@ -22,8 +22,8 @@ public class Dispatcher{
 
         protected ArrayList<String>	_arrColsToKeep;
 
-        public void init( HikariDataSource	hikariDataSource,   	
-                ClientHandle 		clientHandle, 
+        public void init( HikariDataSource	hikariDataSource,
+                ClientHandle 		clientHandle,
                 ClientRequest 	clientRequest ){
             _hikariDataSource   =   hikariDataSource;
             _clientRequest		=	clientRequest;
@@ -36,7 +36,7 @@ public class Dispatcher{
                 Map<String, Object>     map;
                 StringBuffer            strbufResponse;
                 connection	    = _hikariDataSource.getConnection( );
-                map			    = _clientRequest.getData( );				
+                map			    = _clientRequest.getData( );
                 strbufResponse  = execute( connection, map );
                 if( strbufResponse != null )
                     _clientHandle.passResponsetoClient( strbufResponse );
@@ -81,13 +81,13 @@ public class Dispatcher{
             strbufJSON.append( "\"StatusMsg\":\""     +  strStatusMsg + "\","  );
 
             if( strbufRequestData != null )
-                strbufJSON.append( "\"requestData\":{" +  strbufRequestData + "},"   );		
+                strbufJSON.append( "\"requestData\":{" +  strbufRequestData + "},"   );
 
             if( strbufResponseData != null ){
                 if( strbufResponseData.charAt( 0 ) == '[' )
                     strbufJSON.append( "\"responseData\":" +  strbufResponseData  );	// if it is a list, no curley
                 else
-                    strbufJSON.append( "\"responseData\":{" +  strbufResponseData  + "}"  );	
+                    strbufJSON.append( "\"responseData\":{" +  strbufResponseData  + "}"  );
             }
             if( strbufJSON.charAt( strbufJSON.length( ) - 1 ) == ',' )
                 strbufJSON.deleteCharAt( strbufJSON.length( ) - 1 );
@@ -122,30 +122,30 @@ public class Dispatcher{
                     if( arrColstoKeep == null )
                         bKeepColumn = true;
                     else
-                        if(  arrColstoKeep.contains( strColumnName ) ) 
+                        if(  arrColstoKeep.contains( strColumnName ) )
                             bKeepColumn = true;
 
                     if( bKeepColumn ){
                         strbufJSON.append( "\"" +  strColumnName + "\": " );
 
                         if(rsmd.getColumnType(nIndex)==java.sql.Types.BIGINT)
-                            strbufJSON.append( "\"" +  resultSet.getInt(nIndex) + "\""  ); 
+                            strbufJSON.append( "\"" +  resultSet.getInt(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.BOOLEAN)
-                            strbufJSON.append( "\"" +  resultSet.getBoolean(nIndex) + "\""  ); 
+                            strbufJSON.append( "\"" +  resultSet.getBoolean(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.BLOB)
-                            strbufJSON.append( "\"" +  resultSet.getBlob(nIndex) + "\""  ); 
+                            strbufJSON.append( "\"" +  resultSet.getBlob(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.DOUBLE)
                             strbufJSON.append( "\"" +  resultSet.getDouble(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.FLOAT)
                             strbufJSON.append( "\"" +  resultSet.getFloat(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.INTEGER)
-                            strbufJSON.append( "\"" +  resultSet.getInt(nIndex) + "\""  ); 
+                            strbufJSON.append( "\"" +  resultSet.getInt(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.NVARCHAR)
-                            strbufJSON.append( "\"" +  resultSet.getNString(nIndex) + "\""  ); 
+                            strbufJSON.append( "\"" +  resultSet.getNString(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.VARCHAR)
                             strbufJSON.append( "\"" +  resultSet.getString(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.TINYINT)
-                            strbufJSON.append( "\"" +  resultSet.getInt(nIndex) + "\""  );               
+                            strbufJSON.append( "\"" +  resultSet.getInt(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.SMALLINT)
                             strbufJSON.append( "\"" +  resultSet.getInt(nIndex) + "\""  );
                         else if(rsmd.getColumnType(nIndex)==java.sql.Types.DATE)
@@ -159,8 +159,8 @@ public class Dispatcher{
                     }
                 }
                 if( strbufJSON.charAt( strbufJSON.length( ) - 1  ) == ',' )
-                    strbufJSON.setLength( strbufJSON.length( ) - 1 ); 
-                strbufJSON.append( "}," ); 
+                    strbufJSON.setLength( strbufJSON.length( ) - 1 );
+                strbufJSON.append( "}," );
             }
 
             if( strbufJSON.charAt( strbufJSON.length( ) - 1  ) == ',' )
@@ -194,7 +194,7 @@ public class Dispatcher{
         }
 
 
-        public abstract StringBuffer execute(   Connection connection,  
+        public abstract StringBuffer execute(   Connection connection,
                 Map<String, Object> mapUserData ) throws Exception;
     }
 
@@ -210,11 +210,11 @@ public class Dispatcher{
                                 strLastName;
             strEmail    =   (String)mapUserData.get( "email" );
             strPassword =   (String)mapUserData.get( "password" );
-            strFirstName=   (String)mapUserData.get( "firstName" ); 
+            strFirstName=   (String)mapUserData.get( "firstName" );
             strLastName =   (String)mapUserData.get( "lastName" );
 
-            if( strEmail == null || strEmail.trim( ).length( ) == 0 || 
-                    strPassword == null || strPassword.trim( ).length( ) == 0  || 
+            if( strEmail == null || strEmail.trim( ).length( ) == 0 ||
+                    strPassword == null || strPassword.trim( ).length( ) == 0  ||
                     strFirstName == null || strFirstName.trim( ).length( ) == 0  ||
                     strLastName == null || strLastName.trim( ).length( ) == 0 )
                 return null;
@@ -225,9 +225,9 @@ public class Dispatcher{
             sqlProc = connection.prepareCall("{?=call addUserSimple(?,?,?,?)}");
             sqlProc.registerOutParameter(1, Types.INTEGER );
             sqlProc.setString(2, strEmail );
-            sqlProc.setString(3, strPassword );		
-            sqlProc.setString(4, strFirstName );		
-            sqlProc.setString(5, strLastName );		
+            sqlProc.setString(3, strPassword );
+            sqlProc.setString(4, strFirstName );
+            sqlProc.setString(5, strLastName );
 
             sqlProc.execute( );
             strbufResult = makeJSONResponseEnvelope( sqlProc.getInt( 1 ) , null, null );
@@ -266,9 +266,9 @@ public class Dispatcher{
 
             sqlProc = connection.prepareCall("{?=call attemptLogin(?,?,?,?)}");
             sqlProc.registerOutParameter( 1, Types.INTEGER );
-            sqlProc.setString(2, strEmail  );		
-            sqlProc.setString(3, strPassword  );	
-            sqlProc.setString(4, strSessionID  );	
+            sqlProc.setString(2, strEmail  );
+            sqlProc.setString(3, strPassword  );
+            sqlProc.setString(4, strSessionID  );
             sqlProc.setString(5, strClientIP );
             sqlProc.execute( );
             nSQLResult = sqlProc.getInt( 1 );
@@ -281,7 +281,7 @@ public class Dispatcher{
                 mapResult.put( "sessionID", strSessionID );
                 sqlProc = connection.prepareCall( "{?=call getUserFirstName(?)}" );
                 sqlProc.registerOutParameter( 1, Types.VARCHAR );
-                sqlProc.setInt( 2, nSQLResult  );	
+                sqlProc.setInt( 2, nSQLResult  );
                 sqlProc.execute( );
                 strFirstName = sqlProc.getString( 1 );
                 sqlProc.close( );
@@ -297,7 +297,7 @@ public class Dispatcher{
         }
     }
 
-    protected void dispatchRequest( ClientHandle  clientHandle, 
+    protected void dispatchRequest( ClientHandle  clientHandle,
             ClientRequest clientRequest ) throws Exception{
 
         Command				cmd;
@@ -313,8 +313,8 @@ public class Dispatcher{
         _threadPoolCmds.execute( (Runnable) cmd );
     }
 
-    protected void loadHikari( String strAddress, int nPort, 
-            String strDBName, 
+    protected void loadHikari( String strAddress, int nPort,
+            String strDBName,
             String strUserName, String strPassword   ){
 
         _hikariDataSource 	= new HikariDataSource(  );
@@ -335,7 +335,7 @@ public class Dispatcher{
 
         while( enumKeys.hasMoreElements( ) ){
             strActionName = (String)enumKeys.nextElement(  );
-            strClassName  = (String)prop.get( strActionName );            
+            strClassName  = (String)prop.get( strActionName );
             Class<?> innerClass = Class.forName("Dispatcher$" + strClassName);
             _htblCommands.put( strActionName, innerClass );
         }

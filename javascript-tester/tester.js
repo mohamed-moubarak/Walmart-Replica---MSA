@@ -15,7 +15,7 @@ function stripNewLineCharacter( strText ){
 
 
 function sendRequest_vista( strJSON, callbackfunc ){
-   
+
     request.cookie("");
 	request.post('http://localhost:8080/',
 				{ form: { SrvReq: strJSON } },
@@ -62,7 +62,7 @@ function attemptLogin( email, password ){
     gsRequestData.email	    = 	email;
     gsRequestData.password	= 	password;
     gsRequest.data          = 	gsRequestData;
-    var strJSON = JSON.stringify(gsRequest);    
+    var strJSON = JSON.stringify(gsRequest);
     sendRequest( strJSON, attemptLoginResponse );
 }
 
@@ -77,6 +77,6 @@ addUser("mohamed@m.com","johnpass");
 
 
 
-      
 
-                  
+
+

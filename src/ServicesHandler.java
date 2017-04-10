@@ -21,16 +21,16 @@ import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 
     private HttpRequest request;
-    
+
     /** Buffer that stores the response content */
     protected   StringBuilder buf = new StringBuilder( );
 
 	protected   Controller	_controller;
-	
+
 	public ServicesHandler( Controller controller ){
-		_controller = controller;
+	    _controller = controller;
 	}
-    
+
     public void setResponse( StringBuffer strbufResponse ){
         if( strbufResponse == null )
             buf = null;
@@ -39,7 +39,7 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
             buf.append( strbufResponse.toString( ) );
 		}
     }
-    
+
 	@Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.flush();
@@ -48,31 +48,31 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
     @Override
 	public boolean acceptInboundMessage(Object msg) throws Exception{
 		HttpRequest request;
-		
+
 		request = (HttpRequest) msg;
-        if( request.method( ).compareTo( HttpMethod.POST ) == 0 ) 
+        if( request.method( ).compareTo( HttpMethod.POST ) == 0 )
 			return true;
 		return false;
 	}
-	
-	
+
+
 	@Override
     protected void messageReceived(ChannelHandlerContext ctx, Object msg) {
-        
+
         System.err.println(" got a request: "  + msg );
-        
+
         if (msg instanceof HttpRequest) {
-			
+
             this.request = (HttpRequest) msg;
             HttpRequest request = this.request;
             if( request.method( ).compareTo( HttpMethod.POST ) == 0 ) {
                 // it is a POST -- nice
                 try{
 					System.err.println(" got a post: "  + request.toString( ) );
-					
+
 					HttpPostRequestDecoder  postDecoder;
 					List<InterfaceHttpData>	lst;
-            
+
 					postDecoder	=   new HttpPostRequestDecoder( request );
 					lst    =   postDecoder.getBodyHttpDatas(  );
 					int i = 1;
@@ -80,18 +80,18 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 						System.err.println( i + " " + temp);
 						i++;
 					}
-			
-					
+
+
                     _controller.execRequest( new ClientHandle( ctx, request, this ) );
                     synchronized ( this ){
                         this.wait( );
                     }
                     if( buf != null ){
-                        System.err.println( " sending back" + buf.toString( ) );        
-                        writeResponse(request, ctx);   
+                        System.err.println( " sending back" + buf.toString( ) );
+                        writeResponse(request, ctx);
                     }
                     else{
-                        System.err.println( " Got a bad request. Closing channel " );    
+                        System.err.println( " Got a bad request. Closing channel " );
                         ctx.close( );
                     }
                 }
@@ -101,7 +101,7 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
             }
         }
     }
-    
+
      private static void sendHttpResponse( ChannelHandlerContext ctx, HttpRequest req, FullHttpResponse res) {
         // Generate an error page if response getStatus code is not OK (200).
         if (res.status().code() != 200) {
@@ -117,7 +117,7 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
             f.addListener(ChannelFutureListener.CLOSE);
         }*/
     }
-	
+
     private boolean writeResponse(HttpObject currentObj, ChannelHandlerContext ctx) {
         // Decide whether to close the connection or not.
         boolean keepAlive = HttpHeaderUtil.isKeepAlive(request);

@@ -87,16 +87,16 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 	@Override
 	public boolean acceptInboundMessage(Object msg) throws Exception{
 		HttpRequest request;
-		
+
 		request = (HttpRequest) msg;
-        if( request.method( ).compareTo( HttpMethod.GET ) == 0 ) 
+        if( request.method( ).compareTo( HttpMethod.GET ) == 0 )
 			return true;
 		return false;
 	}
-	
+
     @Override
     public void messageReceived(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
-    
+
         if (!request.decoderResult().isSuccess()) {
             sendError(ctx, BAD_REQUEST);
             return;
@@ -114,10 +114,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		if( ( nLoc = path.indexOf( "?" )  ) != -1 ) {
 			path = path.substring( 0, nLoc );
 		}
-        
+
          path = "C:\\temp\\" + path;
 
-                       
+
         File file = new File(path);
         if (file.isHidden() || !file.exists()) {
             sendError(ctx, NOT_FOUND);
@@ -155,7 +155,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
             }
         }
 		*/
-				
+
         RandomAccessFile raf;
         try {
             raf = new RandomAccessFile(file, "r");
@@ -377,11 +377,11 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
      * @param file
      *            file to extract content type
      */
- 
+
 	private static void setContentTypeHeader(HttpResponse response, File file) {
 		String strFileName,
 				strContentType=null;
-		
+
 		strFileName = file.getPath( );
 		if( strFileName.endsWith( "ico" ) )
 			strContentType = "image/x-icon";
@@ -398,20 +398,20 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		if( strFileName.endsWith( "json" )  )
 			strContentType = "application/json";
         if( strFileName.endsWith( "ttf" )  )
-			strContentType = "font/truetype";   // or font/ttf    
+			strContentType = "font/truetype";   // or font/ttf
         if( strFileName.endsWith( "otf" )  )
 			strContentType = "font/opentype";
         if( strFileName.endsWith( "woff" )  )
 			strContentType = "application/x-font-woff";
         if( strFileName.endsWith( "woff2" )  )
 			strContentType = "application/font-woff2";
-		
-        
+
+
         // MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 		// System.err.println( " CONTENT_TYPE " + CONTENT_TYPE + " " + mimeTypesMap.getContentType(file.getPath())  );
         // response.headers().set(CONTENT_TYPE, mimeTypesMap.getContentType(file.getPath()));
-		
+
 		response.headers().set( CONTENT_TYPE, strContentType );
     }
-	
+
 }

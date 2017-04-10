@@ -12,17 +12,17 @@ public final class Services {
 
     public static final boolean SSL 	= System.getProperty("ssl") != null;
     public static final int 	PORT 	= Integer.parseInt( SSL? "8088" : "8080" );
-    
+
     protected static Controller	_controller;
-        
+
     public static void main(String[] args) throws Exception {
-        
+
 		// Configure SSL.
         final SslContext sslCtx;
         if( SSL ) {
             SelfSignedCertificate ssc = new SelfSignedCertificate( );
             sslCtx = SslContext.newServerContext(ssc.certificate(), ssc.privateKey());
-        } 
+        }
 		else{
 			sslCtx = null;
         }
@@ -33,10 +33,10 @@ public final class Services {
         try{
             _controller   =   new Controller( );
             _controller.init( );
-          
+
 			Cache.init( );
             Cache.loadFromDatabase( );
-		  
+
 			ServerBootstrap serverBoot = new ServerBootstrap( );
             serverBoot.group( bossGroup, workerGroup );
             serverBoot.channel( NioServerSocketChannel.class );
@@ -45,7 +45,7 @@ public final class Services {
             Channel channel = serverBoot.bind( PORT ).sync( ).channel( );
             System.err.println("Services running on  " + (SSL? "https" : "http") + "://127.0.0.1:" + PORT + '/');
             channel.closeFuture( ).sync( );
-        } 
+        }
 		finally {
             bossGroup.shutdownGracefully( );
             workerGroup.shutdownGracefully( );
