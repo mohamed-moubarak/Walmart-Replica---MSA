@@ -1,3 +1,4 @@
+package controller;
 
 import java.net.InetAddress;
 import java.net.SocketAddress;
@@ -7,23 +8,25 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.Channel;
 
+import services.ServicesHandler;
+
 public class ClientHandle {
 
     protected	HttpRequest 			_httpRequest;
-	protected	ChannelHandlerContext 	_ctx;
-	protected   ServicesHandler       _serviceHandler;
+    protected	ChannelHandlerContext 	_ctx;
+    protected   ServicesHandler       _serviceHandler;
 
     public ClientHandle( 	ChannelHandlerContext 	ctx,
-							HttpRequest 			httpRequest,
-							ServicesHandler 		serviceHandler ){
-		_ctx			  =	ctx;
+            HttpRequest 			httpRequest,
+            ServicesHandler 		serviceHandler ){
+        _ctx			  =	ctx;
         _httpRequest      =   httpRequest;
         _serviceHandler   =   serviceHandler;
     }
 
-	public  ChannelHandlerContext getContext( ){
-		return _ctx;
-	}
+    public  ChannelHandlerContext getContext( ){
+        return _ctx;
+    }
 
     public  HttpRequest getRequest( ){
         return _httpRequest;
@@ -39,20 +42,20 @@ public class ClientHandle {
         synchronized( _serviceHandler ){
             _serviceHandler.notify( );
         }
-     }
+    }
 
     public void terminateClientRequest(  ){
 
         passResponsetoClient( null );
     }
 
-	public String	getClientIP( ){
+    public String	getClientIP( ){
         String  strIPAddress;
 
-		InetSocketAddress socketAddress = (InetSocketAddress) _ctx.channel( ).remoteAddress( );
-		InetAddress inetaddress 		= socketAddress.getAddress( );
-		strIPAddress 					= inetaddress.getHostAddress( );
-		return strIPAddress;
-	}
+        InetSocketAddress socketAddress = (InetSocketAddress) _ctx.channel( ).remoteAddress( );
+        InetAddress inetaddress 		= socketAddress.getAddress( );
+        strIPAddress 					= inetaddress.getHostAddress( );
+        return strIPAddress;
+    }
 
 }

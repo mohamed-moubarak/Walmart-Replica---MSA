@@ -1,5 +1,7 @@
+package controller;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.boon.json.*;
 

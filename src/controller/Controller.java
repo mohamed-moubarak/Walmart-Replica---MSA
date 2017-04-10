@@ -1,10 +1,13 @@
+package controller;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.boon.json.*;
-
 import io.netty.channel.ChannelHandlerContext;
+
+import commands.Dispatcher;
+import services.Cache;
 
 public class Controller implements ParseListener {
 
@@ -15,7 +18,7 @@ public class Controller implements ParseListener {
     }
 
     public void init( ) throws Exception{
-		_dispatcher = new Dispatcher( );
+        _dispatcher = new Dispatcher( );
         _dispatcher.init( );
         _threadPoolParsers = Executors.newFixedThreadPool( 10 );
     }
@@ -25,23 +28,23 @@ public class Controller implements ParseListener {
     }
 
     public synchronized void parsingFinished(   ClientHandle 	clientHandle,
-                                                ClientRequest   clientRequest ){
+            ClientRequest   clientRequest ){
         try{
-			String strAction;
-			strAction = clientRequest.getAction( );
+            String strAction;
+            strAction = clientRequest.getAction( );
             if( strAction.equalsIgnoreCase( "attemptLogin" ) ||
-                strAction.equalsIgnoreCase( "addUser" )  ){
-                    _dispatcher.dispatchRequest( clientHandle , clientRequest  );
-           }
+                    strAction.equalsIgnoreCase( "addUser" )  ){
+                _dispatcher.dispatchRequest( clientHandle , clientRequest  );
+                    }
             else{
                 String strSessionID;
                 strSessionID = clientRequest.getSessionID( );
                 if( strSessionID == null ||
-                    strSessionID.length( ) == 0 ||
-                    !Cache.sessionExists( strSessionID ) ){
-                       clientHandle.terminateClientRequest( );
+                        strSessionID.length( ) == 0 ||
+                        !Cache.sessionExists( strSessionID ) ){
+                    clientHandle.terminateClientRequest( );
 
-                }
+                        }
                 else{
                     _dispatcher.dispatchRequest( clientHandle , clientRequest );
                 }
@@ -57,6 +60,4 @@ public class Controller implements ParseListener {
         clientHandle.terminateClientRequest( );
         System.err.println( "An error in parsing " + strError );
     }
-
-
 }
