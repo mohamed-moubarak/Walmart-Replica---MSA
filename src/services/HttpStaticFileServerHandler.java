@@ -112,10 +112,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
         }
 
         String strCurrentOS = System.getProperty("os.name");
-        if ( strCurrentOS.equals("Linux") ) {
-            path = path.substring( path.indexOf( "/" ) + 1, path.length( ) );
-        } else {
+        if ( strCurrentOS.contains("Windows") ) {
             path = path.substring( path.indexOf( "\\\\" ) + 2, path.length( ) );
+        } else {
+            path = path.substring( path.indexOf( "/" ) + 1, path.length( ) );
         }
 
         int nLoc;
@@ -123,10 +123,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
             path = path.substring( 0, nLoc );
         }
 
-        if ( strCurrentOS.equals("Linux") ) {
-            path = "/tmp/" + path;
-        } else {
+        if ( strCurrentOS.contains("Windows") ) {
             path = "C:\\temp\\" + path;
+        } else {
+            path = "/tmp/" + path;
         }
 
         File file = new File(path);
