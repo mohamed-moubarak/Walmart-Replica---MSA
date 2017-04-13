@@ -23,17 +23,18 @@ public class Dispatcher{
     public void dispatchRequest( ClientHandle  clientHandle,
             ClientRequest clientRequest ) throws Exception{
 
-        Command				cmd;
-        String				strAction;
-        strAction				 = clientRequest.getAction( );
+        Command       cmd;
+        String        strAction;
 
-        Class<?> innerClass		 = (Class<?>)_htblCommands.get( strAction );
-        Class<?> enclosingClass  = Class.forName( "Dispatcher" );
-        Object enclosingInstance = enclosingClass.newInstance( );
-        Constructor<?> ctor 	 = innerClass.getDeclaredConstructor( enclosingClass );
-        cmd = (Command) ctor.newInstance( enclosingInstance );
-        cmd.init( _hikariDataSource, clientHandle, clientRequest );
-        _threadPoolCmds.execute( (Runnable) cmd );
+        strAction = clientRequest.getAction( );
+
+        Class<?> klass      = (Class<?>) _htblCommands.get(strAction);
+        Constructor<?> ctor = klass.getDeclaredConstructor();
+        ctor.setAccessible(true);
+
+        cmd = (Command) ctor.newInstance();
+        cmd.init(_hikariDataSource, clientHandle, clientRequest);
+        _threadPoolCmds.execute((Runnable) cmd);
     }
 
     protected void loadHikari( String strAddress, int nPort,
