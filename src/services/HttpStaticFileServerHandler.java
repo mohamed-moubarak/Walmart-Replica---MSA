@@ -86,15 +86,15 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
     public static final String HTTP_DATE_GMT_TIMEZONE = "GMT";
     public static final int HTTP_CACHE_SECONDS = 60;
 
-	@Override
-	public boolean acceptInboundMessage(Object msg) throws Exception{
-		HttpRequest request;
+    @Override
+    public boolean acceptInboundMessage(Object msg) throws Exception{
+        HttpRequest request;
 
-		request = (HttpRequest) msg;
+        request = (HttpRequest) msg;
         if( request.method( ).compareTo( HttpMethod.GET ) == 0 )
-			return true;
-		return false;
-	}
+            return true;
+        return false;
+    }
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
@@ -118,10 +118,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
             path = path.substring( path.indexOf( "\\\\" ) + 2, path.length( ) );
         }
 
-		int nLoc;
-		if( ( nLoc = path.indexOf( "?" )  ) != -1 ) {
-			path = path.substring( 0, nLoc );
-		}
+        int nLoc;
+        if( ( nLoc = path.indexOf( "?" )  ) != -1 ) {
+            path = path.substring( 0, nLoc );
+        }
 
         if ( strCurrentOS.equals("Linux") ) {
             path = "/tmp/" + path;
@@ -150,22 +150,22 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
         }
 
         // Cache Validation
-		/*
-        String ifModifiedSince = request.headers().getAndConvert(IF_MODIFIED_SINCE);
-        if (ifModifiedSince != null && !ifModifiedSince.isEmpty()) {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat(HTTP_DATE_FORMAT, Locale.US);
-            Date ifModifiedSinceDate = dateFormatter.parse(ifModifiedSince);
+        /*
+           String ifModifiedSince = request.headers().getAndConvert(IF_MODIFIED_SINCE);
+           if (ifModifiedSince != null && !ifModifiedSince.isEmpty()) {
+           SimpleDateFormat dateFormatter = new SimpleDateFormat(HTTP_DATE_FORMAT, Locale.US);
+           Date ifModifiedSinceDate = dateFormatter.parse(ifModifiedSince);
 
-            // Only compare up to the second because the datetime format we send to the client
-            // does not have milliseconds
-            long ifModifiedSinceDateSeconds = ifModifiedSinceDate.getTime() / 1000;
-            long fileLastModifiedSeconds = file.lastModified() / 1000;
-            if (ifModifiedSinceDateSeconds == fileLastModifiedSeconds) {
-                sendNotModified(ctx);
-                return;
-            }
+        // Only compare up to the second because the datetime format we send to the client
+        // does not have milliseconds
+        long ifModifiedSinceDateSeconds = ifModifiedSinceDate.getTime() / 1000;
+        long fileLastModifiedSeconds = file.lastModified() / 1000;
+        if (ifModifiedSinceDateSeconds == fileLastModifiedSeconds) {
+        sendNotModified(ctx);
+        return;
         }
-		*/
+           }
+           */
 
         RandomAccessFile raf;
         try {
@@ -192,13 +192,13 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
         ChannelFuture lastContentFuture;
         if (ctx.pipeline().get(SslHandler.class) == null) {
             sendFileFuture =
-                    ctx.write(new DefaultFileRegion(raf.getChannel(), 0, fileLength), ctx.newProgressivePromise());
+                ctx.write(new DefaultFileRegion(raf.getChannel(), 0, fileLength), ctx.newProgressivePromise());
             // Write the end marker.
             lastContentFuture = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
         } else {
             sendFileFuture =
-                    ctx.write(new HttpChunkedInput(new ChunkedFile(raf, 0, fileLength, 8192)),
-                            ctx.newProgressivePromise());
+                ctx.write(new HttpChunkedInput(new ChunkedFile(raf, 0, fileLength, 8192)),
+                        ctx.newProgressivePromise());
             // HttpChunkedInput will write the end marker (LastHttpContent) for us.
             lastContentFuture = sendFileFuture;
         }
@@ -207,9 +207,9 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
             @Override
             public void operationProgressed(ChannelProgressiveFuture future, long progress, long total) {
                 if (total < 0) { // total unknown
-                  //  System.err.println(future.channel() + " Transfer progress: " + progress);
+                    //  System.err.println(future.channel() + " Transfer progress: " + progress);
                 } else {
-                  //  System.err.println(future.channel() + " Transfer progress: " + progress + " / " + total);
+                    //  System.err.println(future.channel() + " Transfer progress: " + progress + " / " + total);
                 }
             }
 
@@ -254,11 +254,11 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
         // Simplistic dumb security check.
         // You will have to do something serious in the production environment.
         if (uri.contains(File.separator + '.') ||
-            uri.contains('.' + File.separator) ||
-            uri.charAt(0) == '.' || uri.charAt(uri.length() - 1) == '.' ||
-            INSECURE_URI.matcher(uri).matches()) {
+                uri.contains('.' + File.separator) ||
+                uri.charAt(0) == '.' || uri.charAt(uri.length() - 1) == '.' ||
+                INSECURE_URI.matcher(uri).matches()) {
             return null;
-        }
+                }
 
         // Convert to absolute path.
         return SystemPropertyUtil.get("user.dir") + File.separator + uri;
@@ -296,10 +296,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
             }
 
             buf.append("<li><a href=\"")
-               .append(name)
-               .append("\">")
-               .append(name)
-               .append("</a></li>\r\n");
+                .append(name)
+                .append("\">")
+                .append(name)
+                .append("</a></li>\r\n");
         }
 
         buf.append("</ul></body></html>\r\n");
@@ -389,40 +389,40 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
      *            file to extract content type
      */
 
-	private static void setContentTypeHeader(HttpResponse response, File file) {
-		String strFileName,
-				strContentType=null;
+    private static void setContentTypeHeader(HttpResponse response, File file) {
+        String strFileName,
+               strContentType=null;
 
-		strFileName = file.getPath( );
-		if( strFileName.endsWith( "ico" ) )
-			strContentType = "image/x-icon";
-		if( strFileName.endsWith( "js" ) )
-			strContentType = "application/javascript";
-		if( strFileName.endsWith( "css" ) )
-			strContentType = "text/css";
-		if( strFileName.endsWith( "html" ) ||  strFileName.endsWith( "htm" ) )
-			strContentType = "text/html";
-		if( strFileName.endsWith( "jpeg" ) ||  strFileName.endsWith( "jpg" ) )
-			strContentType = "image/jpeg";
-		if( strFileName.endsWith( "png" )  )
-			strContentType = "image/png";
-		if( strFileName.endsWith( "json" )  )
-			strContentType = "application/json";
+        strFileName = file.getPath( );
+        if( strFileName.endsWith( "ico" ) )
+            strContentType = "image/x-icon";
+        if( strFileName.endsWith( "js" ) )
+            strContentType = "application/javascript";
+        if( strFileName.endsWith( "css" ) )
+            strContentType = "text/css";
+        if( strFileName.endsWith( "html" ) ||  strFileName.endsWith( "htm" ) )
+            strContentType = "text/html";
+        if( strFileName.endsWith( "jpeg" ) ||  strFileName.endsWith( "jpg" ) )
+            strContentType = "image/jpeg";
+        if( strFileName.endsWith( "png" )  )
+            strContentType = "image/png";
+        if( strFileName.endsWith( "json" )  )
+            strContentType = "application/json";
         if( strFileName.endsWith( "ttf" )  )
-			strContentType = "font/truetype";   // or font/ttf
+            strContentType = "font/truetype";   // or font/ttf
         if( strFileName.endsWith( "otf" )  )
-			strContentType = "font/opentype";
+            strContentType = "font/opentype";
         if( strFileName.endsWith( "woff" )  )
-			strContentType = "application/x-font-woff";
+            strContentType = "application/x-font-woff";
         if( strFileName.endsWith( "woff2" )  )
-			strContentType = "application/font-woff2";
+            strContentType = "application/font-woff2";
 
 
         // MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-		// System.err.println( " CONTENT_TYPE " + CONTENT_TYPE + " " + mimeTypesMap.getContentType(file.getPath())  );
+        // System.err.println( " CONTENT_TYPE " + CONTENT_TYPE + " " + mimeTypesMap.getContentType(file.getPath())  );
         // response.headers().set(CONTENT_TYPE, mimeTypesMap.getContentType(file.getPath()));
 
-		response.headers().set( CONTENT_TYPE, strContentType );
+        response.headers().set( CONTENT_TYPE, strContentType );
     }
 
 }
