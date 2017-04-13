@@ -91,4 +91,4 @@ function addProductResponse( err, httpResponse, body ){
 // To start sending messages:
 // addUser("mohamed@m.com","johnpass");
 // attemptLogin("mohamed@m.com","johnpass");
-addProduct("Milk Cartoon","White milk", "10", "300");
+addProduct("Milk Cartoon","White milk", 10.99, 300);
