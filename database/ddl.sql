@@ -98,6 +98,9 @@ CREATE INDEX idx_LoginFailures_userID ON LoginFailures USING btree(user_id);
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 -- PRODUCTS TABLE
 CREATE TABLE IF NOT EXISTS Products (
-    ID  		BIGSERIAL PRIMARY KEY,
-    stock     	INT NOT NULL
+    ID  		      BIGSERIAL PRIMARY KEY,
+    name          VARCHAR(100) NOT NULL,
+    description   text,
+    price         DECIMAL(12,2),
+    stock         INT NOT NULL
 );

@@ -17,7 +17,7 @@ function stripNewLineCharacter( strText ){
 function sendRequest_vista( strJSON, callbackfunc ){
 
     request.cookie("");
-	request.post('http://localhost:8080/',
+	request.post('http://127.0.0.1:8080/',
 				{ form: { SrvReq: strJSON } },
 				function(err,httpResponse,body){callbackfunc(err,httpResponse,body)}
 	);
@@ -25,7 +25,7 @@ function sendRequest_vista( strJSON, callbackfunc ){
 
 function sendRequest_win8( strJSON, callbackfunc ){
 
-	unirest.post('http://localhost:8080/')
+	unirest.post('http://127.0.0.1:8080/')
 	.header('Accept', 'application/json')
 	.send({ "SrvReq": strJSON })
 	.end(function (response) {
@@ -70,13 +70,25 @@ function attemptLoginResponse( err,httpResponse,body ){
     console.log( body );
 }
 
+function addProduct( name, description, price, stock ){
+    var gsRequest             = new Object( );
+    gsRequest.action          = "addProduct";
+    var gsRequestData         = new Object( );
+    gsRequestData.name        = name;
+    gsRequestData.description = description;
+    gsRequestData.price       = price;
+    gsRequestData.stock       = stock;
+    gsRequest.data            = gsRequestData;
+    var strJSON               = JSON.stringify(gsRequest);
+    sendRequest( strJSON, addProductResponse );
+}
+
+function addProductResponse( err, httpResponse, body ){
+    console.log( body );
+}
+
 
 // To start sending messages:
-addUser("mohamed@m.com","johnpass");
+// addUser("mohamed@m.com","johnpass");
 // attemptLogin("mohamed@m.com","johnpass");
-
-
-
-
-
-
+addProduct("Milk Cartoon","White milk", "10", "300");

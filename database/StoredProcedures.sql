@@ -1,11 +1,16 @@
 CREATE OR REPLACE FUNCTION addProduct
-( pStock INT )
+(
+  pName VARCHAR(100),
+  pDescription text,
+  pPrice DECIMAL(12,2),
+  pStock INT
+)
 RETURNS INT as '
   DECLARE pID int;
   BEGIN
   SELECT INTO pID nextval(''products_id_seq'');
-  INSERT into products (ID,stock)
-  VALUES ( pID, pStock );
+  INSERT into products (ID, name, description, price, stock)
+  VALUES ( pID, pName, pDescription, pPrice, pStock );
   RETURN pID;
 END;'
 language 'plpgsql';
