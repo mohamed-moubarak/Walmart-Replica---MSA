@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Types;
 import java.util.Map;
+import java.math.BigDecimal;
 
 import commands.Command;
 
@@ -15,12 +16,12 @@ class AddProductCmd extends Command implements Runnable {
         CallableStatement  sqlProc;
         String             strName,
                            strDescription;
-        Double             dblPrice;
+        BigDecimal         bdclPrice;
         Integer            intStock;
 
         strName        = (String)mapUserData.get( "name" );
         strDescription = (String)mapUserData.get( "description" );
-        dblPrice       = (Double)mapUserData.get( "price" );
+        bdclPrice       = BigDecimal.valueOf((Double)mapUserData.get( "price" ));
         intStock       = (Integer)mapUserData.get( "stock" );
 
         if( strName == null || strName.trim( ).length( ) == 0 ||
@@ -31,7 +32,7 @@ class AddProductCmd extends Command implements Runnable {
         sqlProc.registerOutParameter(1, Types.INTEGER );
         sqlProc.setString(2, strName );
         sqlProc.setString(3, strDescription );
-        sqlProc.setDouble(4, dblPrice );
+        sqlProc.setBigDecimal(4, bdclPrice );
         sqlProc.setInt(5, intStock );
 
         sqlProc.execute( );
