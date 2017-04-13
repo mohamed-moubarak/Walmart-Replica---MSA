@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -18,9 +19,13 @@ import static io.netty.handler.codec.http.HttpVersion.*;
 import io.netty.handler.codec.http.multipart.MixedAttribute;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
+import io.netty.handler.codec.http.multipart.InterfaceHttpData.HttpDataType;
+
+import org.json.*;
 
 import controller.ClientHandle;
 import controller.Controller;
+import controller.ClientRequest;
 
 public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 
@@ -77,16 +82,26 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 					HttpPostRequestDecoder  postDecoder;
 					List<InterfaceHttpData>	lst;
 
-					postDecoder	=   new HttpPostRequestDecoder( request );
-					lst    =   postDecoder.getBodyHttpDatas(  );
-					int i = 1;
-					for (InterfaceHttpData temp : lst) {
-						System.err.println( i + " " + temp);
-						i++;
-					}
+					postDecoder              = new HttpPostRequestDecoder( request );
+                    String strActionName     = "";
+                    String strSessionID      = "77"; // TODO: still not sure about this
+                    Map<String, Object> data = new HashMap<String, Object>();
 
+                    for ( InterfaceHttpData unparsedData : postDecoder.getBodyHttpDatas() ) {
+                        if ( unparsedData.getHttpDataType() == HttpDataType.Attribute ) {
+                            MixedAttribute attribute = (MixedAttribute) unparsedData;
+                            JSONObject jsonObject    = new JSONObject(attribute.getValue());
 
-                    _controller.execRequest( new ClientHandle( ctx, request, this ) );
+                            strActionName = jsonObject.getString("action");
+                            JSONObject dataJSONObject = jsonObject.getJSONObject("data");
+                            for ( String key : dataJSONObject.keySet() ) {
+                                data.put(key, dataJSONObject.get(key));
+                            }
+                        }
+                    }
+
+                    ClientRequest clientRequest = new ClientRequest(strActionName, strSessionID, data);
+                    _controller.execRequest( new ClientHandle( ctx, clientRequest, this ) );
                     synchronized ( this ){
                         this.wait( );
                     }

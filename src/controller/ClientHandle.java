@@ -12,12 +12,12 @@ import services.ServicesHandler;
 
 public class ClientHandle {
 
-    protected	HttpRequest 			_httpRequest;
+    protected	ClientRequest 			_httpRequest;
     protected	ChannelHandlerContext 	_ctx;
     protected   ServicesHandler       _serviceHandler;
 
     public ClientHandle( 	ChannelHandlerContext 	ctx,
-            HttpRequest 			httpRequest,
+            ClientRequest 			httpRequest,
             ServicesHandler 		serviceHandler ){
         _ctx			  =	ctx;
         _httpRequest      =   httpRequest;
@@ -28,7 +28,7 @@ public class ClientHandle {
         return _ctx;
     }
 
-    public  HttpRequest getRequest( ){
+    public  ClientRequest getRequest( ){
         return _httpRequest;
     }
 

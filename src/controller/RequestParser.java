@@ -21,7 +21,7 @@ public class RequestParser implements Runnable {
 
     public void run( ){
         try{
-
+        _parseListener.parsingFinished(_clientHandle, _clientHandle.getRequest());
         }
         catch( Exception exp ){
             _parseListener.parsingFailed( _clientHandle, "Exception while parsing JSON object " + exp.toString( ) );
