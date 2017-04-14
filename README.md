@@ -1,4 +1,4 @@
-Wallmart Replica
+Wallmart Replica - Search App
 ---
 
 ## Installation
