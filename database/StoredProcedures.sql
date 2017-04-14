@@ -49,6 +49,20 @@ BEGIN
 END;'
 language 'plpgsql';
 
+CREATE OR REPLACE FUNCTION verifyPassword
+( uEmail VARCHAR(100), uPassword VARCHAR(120) )
+RETURNS INT as'
+declare
+    oldPassword     VARCHAR(120);
+BEGIN
+  SELECT INTO oldPassword password_hash from users WHERE email = uEmail;
+  if ( oldPassword = uPassword ) then
+    RETURN 0;
+  end if;
+  RETURN -1;
+END;'
+language 'plpgsql';
+
 CREATE OR REPLACE FUNCTION editinfo
 (
     pUserEmail      VARCHAR(100),
