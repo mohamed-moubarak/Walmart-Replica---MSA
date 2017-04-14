@@ -1,0 +1,280 @@
+
+create or replace function addUserSimple(
+	pEmail 		VARCHAR(100),
+	pPassword	VARCHAR(30),
+    pFirstName	VARCHAR(30),
+    pLastName	VARCHAR(30)
+    )
+returns INT as'
+
+declare    
+    ltimeCurrent    TIMESTAMP;
+    lEmail          VARCHAR(100);
+    lPasswordHash   VARCHAR(120);
+    lPicturePath    VARCHAR(250);
+    lID				INT;
+    lGSID           INT;
+    
+begin
+	select into lEmail email from Users where email = pEmail;
+
+	--Return error message if email already exists in database
+	if(lEmail is not null) then
+		return -401;
+	end if;
+
+	--generate timestamp value for entry into database
+	select into ltimeCurrent ''now'';
+	
+    -- set a default image
+    select into lPicturePath    ''imgs/users/user.png'';
+    
+    -- generate hash of password. We do not store password. We store hashes to protect user privacy.
+    -- requires pgcrypto extension which is an addon to postgreSQL
+    select into lPasswordHash crypt( pPassword, gen_salt(''bf''));
+    
+	select into lID  nextval(''seq_Users_ID'');
+	--insert tuple with minimal given information into users table
+	insert  into Users
+                (ID,email,firstName,lastName,passwordHash,averageRating,
+                contractsCompleted,disabled,verified,creationTime,picturePath)
+            values(
+                lID,
+                pEmail,
+                pFirstName,
+                pLastName,
+                lPasswordHash,
+                0,
+                0,
+                FALSE,
+				FALSE,
+                ltimeCurrent,
+                lPicturePath
+            );
+	
+	return lID;
+    
+end;
+' language 'plpgsql';
+
+-------------------------------------------------------------
+
+create or replace function checkUserEmailExistance(
+	pEmail 		VARCHAR(100)
+    )
+returns INT as'
+
+declare    
+    lEmail          VARCHAR(100);
+    
+begin
+	select into lEmail email from Users where email = pEmail;
+
+	--Return error message if email already exists in database
+	if(lEmail is not null) then
+		return -401;
+	end if;
+
+    return 0;
+    
+end;
+' language 'plpgsql';
+
+-------------------------------------------------------------
+
+create or replace function attemptLogin(
+	pUserEmail  VARCHAR(100),
+    pPassword   VARCHAR(30),
+    pCookie     VARCHAR(500),
+    pAddress    VARCHAR(100)
+	)
+
+returns INT as'
+
+declare
+    ltimeCurrent    TIMESTAMP;
+    lLoginID		INT;
+    lUserID         INT;
+	lResult         INT;
+    lLFResult       INT;
+        
+begin
+    select into ltimeCurrent 	''now'';
+    select into lResult verifyPassword( pUserEmail, pPassword );
+    if( lResult = 0 ) then
+        select into lUserID  ID from Users where email = pUserEmail;
+        select into lLoginID nextval(''seq_Logins_ID'');
+        insert into Logins
+                values(
+                    lLoginID,
+                    lUserID,
+                    ltimeCurrent,
+                    pAddress,
+                    FALSE
+            );
+        select into lResult startSession( lUserID, pCookie, pAddress );
+        if(lResult > 0 ) then
+            return lUserID;
+        else
+            return lResult;
+        end if;
+	end if;
+	if( lResult = -403 ) then
+        select into lUserID ID from Users where email = pUserEmail;
+        select into lLFResult   recordLoginFailure( lUserID, pAddress );
+        if( lLFResult = -416 ) then
+            return lLFResult;
+        end if;
+	end if;
+    return lResult;
+end;
+' language 'plpgsql';
+
+-------------------------------------------------------------
+
+create or replace function startSession(
+	pUserID         INT,
+    pCookie         VARCHAR(500),
+    pAddress        VARCHAR(100)
+	)
+
+returns INT as'
+
+declare
+    ltimeCurrent    TIMESTAMP;
+    lUserID         INT;
+	lSessionID		INT;
+    
+begin
+    select into lUserID userID  from Sessions where userID = pUserID;
+    select into ltimeCurrent 	''now'';
+    select into lSessionID		nextval(''seq_Sessions_ID'');
+	
+    if( lUserID is null ) then
+        insert into Sessions
+                values(
+                    lSessionID,
+                    pUserID,
+                    pCookie,
+                    ltimeCurrent,
+                    ltimeCurrent,
+                    pAddress
+                );
+    else
+        update Sessions
+            set     sessionStartTime = ltimeCurrent,
+                    lastAccessTime   = ltimeCurrent,
+					cookie			 = pCookie
+            where   userID = pUserID;
+    end if;
+
+    return lSessionID;
+	
+end;
+' language 'plpgsql';
+
+---------------------------------------------------------------
+
+create or replace function verifySession(
+    pCookie         VARCHAR(500),
+    pAddress        VARCHAR(100)
+	)
+    
+returns INT as'
+
+declare
+	lID             INT;
+    ltimeCurrent    TIMESTAMP;
+    lLastAccess     TIMESTAMP;
+    lIP             VARCHAR(100);
+    
+begin
+	select into lID ID from Sessions
+            where cookie = pCookie;
+    if( lID is null ) then
+        return -701;
+    end if;
+	
+    select into ltimeCurrent ''now'';
+    select into lLastAccess lastAccessTime 
+                from Sessions 
+                where cookie = pCookie;
+    if( ltimeCurrent - lLastAccess > (interval ''4 hours'') ) then
+        select deleteSession( pCookie );
+        return -702;
+    end if;
+    
+    select into lIP address from Sessions where cookie = pCookie;
+    if( lIP != pAddress ) then
+        select deleteSession( pCookie );
+        return -703;
+    end if;
+    
+    update Sessions 
+            set lastaccesstime = ltimeCurrent
+            where cookie = pCookie;
+            
+	return 0;
+end;
+' language 'plpgsql';
+
+-------------------------------------------------------------
+
+
+create or replace function recordLoginFailure(
+	pUserID     INT,
+	pAddress    VARCHAR(100)
+	)
+
+returns INT as'
+
+declare
+    ltimeCurrent    TIMESTAMP;
+    lAttemptsCount  INT;
+	lFailureID		INT;
+    lDeactivationID INT;
+    
+begin
+
+	select into ltimeCurrent 	''now'';
+	select into lFailureID		nextval(''seq_LoginFailures_ID'');
+	insert into 
+        LoginFailures
+            values(
+				lFailureID,
+                pUserID,
+                ltimeCurrent,
+                pAddress
+            );
+    
+    select into lAttemptsCount count(ID) 
+            from LoginFailures 
+            where userID = pUserID;
+    if( lAttemptsCount > 3 ) then
+            select into lDeactivationID deactivateUserAccount( pUserID );
+            return -416;
+    end if;
+	
+    return 0;
+	
+end;
+' language 'plpgsql';
+
+
+----------------------------------------------------------------
+
+create or replace function deleteSession(
+    pCookie   VARCHAR(500)
+	)
+
+returns INT as'
+
+declare
+	
+begin
+    delete from Sessions where cookie = pCookie;
+   
+	return 0;
+end;
+' language 'plpgsql';
+    
