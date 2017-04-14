@@ -32,11 +32,9 @@ public class Controller implements ParseListener {
         try{
             String strAction;
             strAction = clientRequest.getAction( );
-            if( strAction.equalsIgnoreCase( "attemptLogin" ) ||
-                    strAction.equalsIgnoreCase( "addUserSimple" ) ||
-                    strAction.equalsIgnoreCase( "addProduct" ) ){
+            if( strAction.equalsIgnoreCase( "searchProducts" ) ) {
                 _dispatcher.dispatchRequest( clientHandle , clientRequest  );
-                    }
+            }
             else{
                 String strSessionID;
                 strSessionID = clientRequest.getSessionID( );
