@@ -26,7 +26,7 @@ public class RetrieveUnclaimedMessagesCmd extends Command implements Runnable {
 
 		System.out.println("before");
 
-		FindIterable<Document> result = messages.find(new Document("receiverID", null));
+		FindIterable<Document> result = messages.find(new Document("receiverID", "null"));
 
 		System.out.println("after");
 

@@ -135,7 +135,8 @@ function retrieveUnclaimedMessagesResponse( err,httpResponse,body ){
     console.log( body );
 }
 
-// sendMessage("13", "second message", "14");
+// sendMessage("13", "dummy message" , "14");
+// sendMessage("13", "dummy message" , null);
 // sendMessage("15", "third message", "14");
-
+// fetchMessages("14");
 retrieveUnclaimedMessages("14");
