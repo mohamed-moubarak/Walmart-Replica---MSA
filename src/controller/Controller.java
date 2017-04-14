@@ -1,6 +1,10 @@
+package controller;
 
 import java.util.*;
 import java.util.concurrent.*;
+
+import cache.Cache;
+import commands.Dispatcher;
 
 //import org.boon.json.*;
 
@@ -52,7 +56,6 @@ public class Controller implements ParseListener {
 			}
 		} catch (Exception exp) {
 			clientHandle.terminateClientRequest();
-			System.out.println("haha");
 			System.err.println(exp.toString());
 		}
 	}
