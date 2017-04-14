@@ -102,9 +102,30 @@ function updateStockResponse( err, httpResponse, body ){
     console.log( body );
 }
 
+function editInfo( email, password, newpassword, firstName, lastName, picturepath, gender ){
+    var gsRequest             = new Object( );
+    gsRequest.action          = "editInfo";
+    var gsRequestData         = new Object( );
+    gsRequestData.email       = email;
+    gsRequestData.password    = password;
+    gsRequestData.newpassword = newpassword;
+    gsRequestData.firstName   = firstName;
+    gsRequestData.lastName    = lastName;
+    gsRequestData.picturepath = picturepath;
+    gsRequestData.gender      = gender;
+    gsRequest.data            = gsRequestData;
+    var strJSON               = JSON.stringify(gsRequest);
+    sendRequest( strJSON, editInfoResponse );
+}
+
+function editInfoResponse( err, httpResponse, body ){
+    console.log( body );
+}
+
 
 // To start sending messages:
 // addUser("mohamed@m.com","johnpass");
 // attemptLogin("mohamed@m.com","johnpass");
 // addProduct("Milk Cartoon","White milk", 10.99, 300);
-updateStock(2, 10);
+// updateStock(2, 10);
+editInfo("super@example.com", "123456789", "12345@hello", "John", "Doe", "", "male");

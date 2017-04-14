@@ -36,7 +36,8 @@ public class Controller implements ParseListener {
                     strAction.equalsIgnoreCase( "addUserSimple" ) ||
                     strAction.equalsIgnoreCase( "addProduct" ) ||
                     strAction.equalsIgnoreCase( "updateStock" ) ||
-                    strAction.equalsIgnoreCase( "decreaseStock" ) ){
+                    strAction.equalsIgnoreCase( "decreaseStock" ) ||
+                    strAction.equalsIgnoreCase( "editInfo" ) ){
                 _dispatcher.dispatchRequest( clientHandle , clientRequest  );
                     }
             else{

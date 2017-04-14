@@ -7,7 +7,7 @@ import java.util.Map;
 
 import commands.Command;
 
-class editinfocmd extends Command implements Runnable {
+class EditInfoCmd extends Command implements Runnable {
 
     public StringBuffer execute(Connection connection,  Map<String, Object> mapUserData ) throws Exception {
 
