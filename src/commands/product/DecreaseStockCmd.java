@@ -19,11 +19,10 @@ class DecreaseStockCmd extends Command implements Runnable {
         Integer            intStock,
         					intID;
 
-        strName        = (String)mapUserData.get( "name" );
-        intID = 		(Integer)mapUserData.get( "PID" );
-        intStock       = (Integer)mapUserData.get( "stock" );
-        if( strName == null || strName.trim( ).length( ) == 0 ||
-                intStock == null || intStock ==0)
+        intID    = (Integer)mapUserData.get( "PID" );
+        intStock = (Integer)mapUserData.get( "stock" );
+
+        if( intStock == null )
             return null;
 
         sqlProc = connection.prepareCall("{?=call decreaseStock(?)}");

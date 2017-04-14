@@ -19,12 +19,10 @@ class UpdateStockCmd extends Command implements Runnable {
         Integer            intStock,
         					intID;
 
-        strName        = (String)mapUserData.get( "name" );
-        intID = (Integer)mapUserData.get( "PID" );
-        intStock       = (Integer)mapUserData.get( "stock" );
+        intID    = (Integer)mapUserData.get( "PID" );
+        intStock = (Integer)mapUserData.get( "stock" );
 
-        if( strName == null || strName.trim( ).length( ) == 0 ||
-                intStock == null )
+        if( intStock == null )
             return null;
 
         sqlProc = connection.prepareCall("{?=call updateStock(?,?)}");
