@@ -1,3 +1,10 @@
+CREATE OR REPLACE FUNCTION getProducts( )
+RETURNS SETOF products AS '
+BEGIN
+  RETURN QUERY SELECT * FROM products ORDER BY id ASC;
+END;'
+language 'plpgsql';
+
 CREATE OR REPLACE FUNCTION addProduct
 (
   pName VARCHAR(100),

@@ -122,10 +122,24 @@ function editInfoResponse( err, httpResponse, body ){
     console.log( body );
 }
 
+function listProducts( ){
+    var gsRequest             = new Object( );
+    gsRequest.action          = "listProducts";
+    var gsRequestData         = new Object( );
+    gsRequest.data            = gsRequestData;
+    var strJSON               = JSON.stringify(gsRequest);
+    sendRequest( strJSON, listProductsResponse );
+}
+
+function listProductsResponse( err, httpResponse, body ){
+    console.log( body );
+}
+
 
 // To start sending messages:
 // addUser("mohamed@m.com","johnpass");
 // attemptLogin("mohamed@m.com","johnpass");
 // addProduct("Milk Cartoon","White milk", 10.99, 300);
 // updateStock(2, 10);
-editInfo("super@example.com", "123456789", "12345@hello", "John", "Doe", "", "male");
+// editInfo("super@example.com", "123456789", "12345@hello", "John", "Doe", "", "male");
+listProducts( );
