@@ -11,7 +11,7 @@ function stripNewLineCharacter( strText ) {
 
 function sendRequest( strJSON, callbackfunc ) {
   console.log( "trying to send " + strJSON );
-  unirest.post('http://127.0.0.1:8080/')
+  unirest.post('http://127.0.0.1:8081/')
     .header('Accept', 'application/json')
     .send({ "SrvReq": strJSON })
     .end(function (response) {

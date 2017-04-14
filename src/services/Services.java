@@ -15,7 +15,7 @@ import controller.Controller;
 public final class Services {
 
     public static final boolean SSL 	= System.getProperty("ssl") != null;
-    public static final int 	PORT 	= Integer.parseInt( SSL? "8088" : "8080" );
+    public static final int 	PORT 	= Integer.parseInt( SSL? "8081" : "8081" );
 
     protected static Controller	_controller;
 
