@@ -55,7 +55,7 @@ public class RequestParser implements Runnable {
 
 				jsonData = parser.parseJson(jsonStr);
 
-				ClientRequest cr = new ClientRequest(strAction, "sessionID", jsonData);
+				ClientRequest cr = new ClientRequest(strAction, null, jsonData);
 
 				_parseListener.parsingFinished(_clientHandle, cr);
 

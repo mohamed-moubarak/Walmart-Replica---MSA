@@ -91,18 +91,37 @@ function attemptLoginResponse( err,httpResponse,body ){
     console.log( body );
 }
 
+function attemptLogout( sessionID ){
+    var gsRequest           =   new Object( );
+    gsRequest.action        =   "attemptLogout";
+    var gsRequestData       =   new Object( );
+    gsRequestData.sessionID =   sessionID;
+    gsRequest.data          =   gsRequestData;
+    var strJSON = JSON.stringify(gsRequest);    
+    sendRequest( strJSON, attemptLogoutResponse );
+}
+
+function attemptLogoutResponse( err,httpResponse,body ){
+    console.log( body );
+}
+
 // add users to the database
-// addUser("heshamww@g.com","heshampass", "hesham", "wardany");
+// addUser("abc@g.com","abcpass", "hesham", "wardany");
 // addUser("hany@a.com","hanypass", "ahmad", "hany");
 // addUser("bassem@y.com","bassempass", "mohamad", "bassem");
 // // addUser("attwa@s.net","attwapass", "mohamad", "attwa");
 
-// attemptLogin("heshamww@g.com","heshampass");
+// "sessionID":"2bae123f-0034-4b90-99f3-30304272698d" user abc@g.com
+
+// attemptLogin("abc@g.com","abcpass");
+
+attemptLogout("7b44e59f-be0a-46cc-979f-c45e8bd1e713");
+
 // attemptLogin("hany@a.com","hanypass");
 // attemptLogin("bassem@y.com","bassempass");
 // // attemptLogin("attwa@s.com","attwapass");
 
-editInfo("heshamww@g.com","heshampass", "heshamnewpass", "hesham", "el-wardany", "dummy/path/", "MALE");
+// editInfo("heshamww@g.com","heshampass", "heshamnewpass", "hesham", "el-wardany", "dummy/path/", "MALE");
 
 
 
