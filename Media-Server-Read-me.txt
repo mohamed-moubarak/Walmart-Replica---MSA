@@ -1,0 +1,20 @@
+1-We used GlusterFs to create our media server
+2-We needed two pcs to initialize the server and one of the pcs is the client
+3-First we configure the hosts file with the two ips of the two pcs on the network and give it names ex: gluster0 , gluster1
+  -nano /etc/hosts :
+  write the two ips ex:
+  -192.168.1.9 gluster0
+  -192.168.1.8 gluster1
+4-Then we peer probe to connect the two pcs
+    peer probe gluster0
+5-then we create a volume and give it a name and start it
+  -sudo gluster volume create volume1 replica 2 transport tcp gluster0:/gluster-storage gluster1:/gluster-storage force
+  -sudo gluster volume start volume1
+  -sudo mkdir /storage-pool
+
+6-both servers can see this volume
+  -sudo mount -t glusterfs gluster0:/volume1 /storage-pool
+
+7-then we can push the images or whatever we want on this storage and both pcs can see these files
+  - I pushed files on it
+  -sudo touch file{1..20}
