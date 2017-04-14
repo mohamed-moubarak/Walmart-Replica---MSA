@@ -87,8 +87,24 @@ function addProductResponse( err, httpResponse, body ){
     console.log( body );
 }
 
+function updateStock( productID, stock ){
+    var gsRequest             = new Object( );
+    gsRequest.action          = "updateStock";
+    var gsRequestData         = new Object( );
+    gsRequestData.PID         = productID;
+    gsRequestData.stock       = stock;
+    gsRequest.data            = gsRequestData;
+    var strJSON               = JSON.stringify(gsRequest);
+    sendRequest( strJSON, updateStockResponse );
+}
+
+function updateStockResponse( err, httpResponse, body ){
+    console.log( body );
+}
+
 
 // To start sending messages:
 // addUser("mohamed@m.com","johnpass");
 // attemptLogin("mohamed@m.com","johnpass");
-addProduct("Milk Cartoon","White milk", 10.99, 300);
+// addProduct("Milk Cartoon","White milk", 10.99, 300);
+updateStock(2, 10);

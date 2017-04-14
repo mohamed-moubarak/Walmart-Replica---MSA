@@ -34,7 +34,9 @@ public class Controller implements ParseListener {
             strAction = clientRequest.getAction( );
             if( strAction.equalsIgnoreCase( "attemptLogin" ) ||
                     strAction.equalsIgnoreCase( "addUserSimple" ) ||
-                    strAction.equalsIgnoreCase( "addProduct" ) ){
+                    strAction.equalsIgnoreCase( "addProduct" ) ||
+                    strAction.equalsIgnoreCase( "updateStock" ) ||
+                    strAction.equalsIgnoreCase( "decreaseStock" ) ){
                 _dispatcher.dispatchRequest( clientHandle , clientRequest  );
                     }
             else{
