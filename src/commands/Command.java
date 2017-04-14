@@ -1,40 +1,33 @@
 package commands;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.Map;
-
-import com.zaxxer.hikari.HikariDataSource;
 
 import controller.ClientHandle;
 import controller.ClientRequest;
 import controller.ResponseCodes;
 
 public abstract class Command {
-    protected HikariDataSource      _hikariDataSource;
     protected ClientHandle			_clientHandle;
     protected ClientRequest 		_clientRequest;
 
     protected ArrayList<String>	_arrColsToKeep;
 
-    public void init( HikariDataSource	hikariDataSource,
-            ClientHandle 		clientHandle,
-            ClientRequest 	clientRequest ){
-        _hikariDataSource   =   hikariDataSource;
-        _clientRequest		=	clientRequest;
-        _clientHandle		=	clientHandle;
+    public void init( ClientHandle clientHandle, ClientRequest clientRequest ) {
+        _clientRequest = clientRequest;
+        _clientHandle  = clientHandle;
     }
 
     public void run( ){
-        Connection	connection = null;
         try{
             Map<String, Object>     map;
             StringBuffer            strbufResponse;
-            connection	    = _hikariDataSource.getConnection( );
+
             map			    = _clientRequest.getData( );
-            strbufResponse  = execute( connection, map );
+            strbufResponse  = execute( map );
+
             if( strbufResponse != null )
                 _clientHandle.passResponsetoClient( strbufResponse );
             else
@@ -42,21 +35,8 @@ public abstract class Command {
         }
         catch( Exception exp ){
             System.err.println( exp.toString( ) );
-            _clientHandle.terminateClientRequest( );
         }
         finally{
-            closeConnectionQuietly( connection );
-        }
-    }
-
-    protected void closeConnectionQuietly( Connection	connection ){
-        try{
-            if( connection != null )
-                connection.close( );
-        }
-        catch( Exception exp ){
-            // log this...
-            exp.printStackTrace( );
         }
     }
 
@@ -191,6 +171,6 @@ public abstract class Command {
     }
 
 
-    public abstract StringBuffer execute(   Connection connection,
-            Map<String, Object> mapUserData ) throws Exception;
+    public abstract StringBuffer execute( Map<String, Object> mapUserData )
+        throws Exception;
 }

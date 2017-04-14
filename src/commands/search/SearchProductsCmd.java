@@ -1,15 +1,13 @@
 package commands.search;
 
-import org.json.*;
-
-import java.sql.Connection;
 import java.util.Map;
+import org.json.*;
 
 import commands.Command;
 
 class SearchProductsCmd extends Command implements Runnable {
 
-    public StringBuffer execute(Connection _connection,  Map<String, Object> mapUserData ) throws Exception {
+    public StringBuffer execute( Map<String, Object> mapUserData ) throws Exception {
 
         StringBuffer strbufResult;
         String       strSearchQuery;
