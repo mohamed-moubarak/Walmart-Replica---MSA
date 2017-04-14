@@ -5,6 +5,8 @@ import java.math.*;
 import java.lang.reflect.*;
 import java.util.concurrent.*;
 
+import org.bson.*;
+import com.mongodb.*;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class Dispatcher {
@@ -201,91 +203,89 @@ public class Dispatcher {
 		public abstract StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception;
 	}
 
-	class EditInfoCmd extends Command implements Runnable {
+	 class AddtoCartCmd extends Command implements Runnable {
+	        
+	        public StringBuffer execute(Connection connection,  Map<String, Object> mapUserData, MongoCollection<Document> collection) throws Exception {
+	            
+				StringBuffer        strbufResult;
 
-		public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
+				String strID;
+	            String itemID;
+	            String itemQty;
+	            strID    =   (String)mapUserData.get( "userID" );
+	            itemID    =   (String)mapUserData.get( "itemID" );
+	            itemQty   =   (String)mapUserData.get( "itemQty" );
+	            if( strID == null || strID.trim( ).length( ) == 0 ||  
+	                itemID == null || itemID.trim( ).length( ) == 0  ||
+	                itemQty == null || itemQty.trim( ).length( ) == 0)
+	               return null;
+	                List<Document> cart = (List<Document>) collection.find(Filters.eq("userID", strID))
+	                .into(new ArrayList<Document>());
 
-			StringBuffer strbufResult;
-			CallableStatement sqlProc;
-			String strEmail, strPassword, strnewPassword, strFirstName, strLastName, strPicturePath, strGender;
-			strEmail = (String) mapUserData.get("email");
-			strnewPassword = (String) mapUserData.get("newPassword");
-			strPassword = (String) mapUserData.get("password");
-			strFirstName = (String) mapUserData.get("firstname");
-			strLastName = (String) mapUserData.get("lastname");
-			strPicturePath = (String) mapUserData.get("picturePath");
-			strGender = (String) mapUserData.get("gender");
+	            if (cart.isEmpty()) {
+	            Document doc = new Document("userID", strID).append("items", new Document(itemID, itemQty));
+	            collection.insertOne(doc);
+	             } else {
+	            if (!((Document) cart.get(0).get("items")).containsKey(itemID)) {
+	                ((Document) cart.get(0).get("items")).append(itemID, itemQty);
+	            } else {
+	                int old = Integer.parseInt((String) ((Document) cart.get(0).get("items")).get(itemID));
+	                ((Document) cart.get(0).get("items")).put(itemID, old + Integer.parseInt(itemQty) + "");
+	            }
+	            collection.replaceOne(Filters.eq("userID", strID), cart.get(0));
 
-			if (strEmail == null || strEmail.trim().length() == 0 || strPassword == null
-					|| strPassword.trim().length() == 0 || strnewPassword == null || strnewPassword.trim().length() == 0
-					|| strFirstName == null || strFirstName.trim().length() == 0 || strLastName == null
-					|| strLastName.trim().length() == 0 || strPicturePath == null || strPicturePath.trim().length() == 0
-					|| strGender == null || strGender.trim().length() == 0)
+	            }
+
+				strbufResult = makeJSONResponseEnvelope( strID , null, null );
+	            sqlProc.close( );
+				
+	            return strbufResult;
+	        }
+
+			@Override
+			public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
+				// TODO Auto-generated method stub
 				return null;
+			}
+	    }
+	class createTransactionCmd extends Command implements Runnable {
+	        
+	        public StringBuffer execute(Connection connection,  Map<String, Object> mapUserData,MongoCollection<Document> collection) throws Exception {
+	            
+	            CallableStatement   sqlProc;
+	            StringBuffer        strbufResult = null,
+	                                strbufResponseJSON;
+	            String              userID    =   ((String)mapUserData.get( "userID" ));
+	            if( userID == null || userID.trim( ).length( ) == 0)
+	                return null;
+	            
+	            List<Document> cart = (List<Document>) collection.find(Filters.eq("userID", strID)).into(new ArrayList<Document>());
+	            Document doc = ((Document) cart.get(0).get("items"));
+	            Collection<Object> x = doc.values();
+	            String[] a = doc.toString().substring(10, doc.toString().length() - 2).replaceAll("\\s", "").split(",");
+	            for (int i = 0; i < a.length; i++) {
+	                String[] b = a[i].split("=");
+	                sqlProc = connection.prepareCall("{?=call decreaseStock(?,?)}");
+	                sqlProc.registerOutParameter(1, Types.INTEGER);
+	                sqlProc.setString(2, b[0]);
+	                sqlProc.setString(3, b[1]);
+	                sqlProc.execute();
+	                int ID = sqlProc.getInt(1);
+	            }
+	            strbufResult = makeJSONResponseEnvelope(userID, null, null );
+	            sqlProc.close( );
+	            collection.deleteOne(Filters.eq("userID", strID));
+	            return strbufResult;
+	        
+	    
+	    }
 
-			if (!EmailVerifier.verify(strEmail))
+			@Override
+			public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
+				// TODO Auto-generated method stub
 				return null;
-
-			sqlProc = connection.prepareCall("{?=call editInfo(?, ?, ?, ?, ?, ?, ?)}");
-
-			sqlProc.registerOutParameter(1, Types.INTEGER);
-			sqlProc.setString(2, strEmail);
-			sqlProc.setString(3, strPassword);
-			sqlProc.setString(4, strnewPassword);
-			sqlProc.setString(5, strFirstName);
-			sqlProc.setString(6, strLastName);
-			sqlProc.setString(7, strPicturePath);
-			sqlProc.setString(8, strGender);
-
-			sqlProc.execute();
-			strbufResult =
-
-					makeJSONResponseEnvelope(sqlProc.getInt(1), null, null);
-			sqlProc.close();
-
-			return strbufResult;
-		}
+			}
 	}
-
-	class AddUserSimpleCmd extends Command implements Runnable {
-
-		public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
-
-			StringBuffer strbufResult;
-			CallableStatement sqlProc;
-			String strEmail, strPassword, strFirstName, strLastName;
-			strEmail = (String) mapUserData.get("email");
-			strPassword = (String) mapUserData.get("password");
-			strFirstName = (String) mapUserData.get("firstname");
-			strLastName = (String) mapUserData.get("lastname");
-
-			if (strEmail == null || strEmail.trim().length() == 0 || strPassword == null
-					|| strPassword.trim().length() == 0 || strFirstName == null || strFirstName.trim().length() == 0
-					|| strLastName == null || strLastName.trim().length() == 0)
-				return null;
-
-			if (!EmailVerifier.verify(strEmail))
-				return null;
-
-			sqlProc = connection.prepareCall("{?=call addUserSimple(?, ?, ?, ?)}");
-
-			sqlProc.registerOutParameter(1, Types.INTEGER);
-			sqlProc.setString(2, strEmail);
-			sqlProc.setString(3, strPassword);
-			sqlProc.setString(4, strFirstName);
-			sqlProc.setString(5, strLastName);
-
-			sqlProc.execute();
-			strbufResult =
-
-					makeJSONResponseEnvelope(sqlProc.getInt(1), null, null);
-			sqlProc.close();
-
-			return strbufResult;
-		}
-	}
-
-	class AttemptLoginCmd extends Command implements Runnable {
 
 		public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
 
@@ -336,7 +336,7 @@ public class Dispatcher {
 
 			return strbufResult;
 		}
-	}
+	
 
 	protected void dispatchRequest(ClientHandle clientHandle, ClientRequest clientRequest) throws Exception {
 
@@ -384,7 +384,7 @@ public class Dispatcher {
 	}
 
 	public void init() throws Exception {
-		loadHikari("localhost", 5432, "postgres", "postgres", "boyka_88");
+		loadHikari("localhost", 5432, "mds", "postgres", "123");
 		loadThreadPool();
 		loadCommands();
 	}
