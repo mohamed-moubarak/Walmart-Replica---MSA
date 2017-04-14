@@ -111,23 +111,23 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
             return;
         }
 
-        String strCurrentOS = System.getProperty("os.name");
-        if ( strCurrentOS.contains("Windows") ) {
-            path = path.substring( path.indexOf( "\\\\" ) + 2, path.length( ) );
-        } else {
-            path = path.substring( path.indexOf( "/" ) + 1, path.length( ) );
-        }
+        // String strCurrentOS = System.getProperty("os.name");
+        // if ( strCurrentOS.contains("Windows") ) {
+        //     path = path.substring( path.indexOf( "\\\\" ) + 2, path.length( ) );
+        // } else {
+        //     path = path.substring( path.indexOf( "/" ) + 1, path.length( ) );
+        // }
 
         int nLoc;
         if( ( nLoc = path.indexOf( "?" )  ) != -1 ) {
             path = path.substring( 0, nLoc );
         }
 
-        if ( strCurrentOS.contains("Windows") ) {
-            path = "C:\\temp\\" + path;
-        } else {
-            path = "/tmp/" + path;
-        }
+        // if ( strCurrentOS.contains("Windows") ) {
+        //     path = "C:\\temp\\" + path;
+        // } else {
+        //     path = "/tmp/" + path;
+        // }
 
         File file = new File(path);
         if (file.isHidden() || !file.exists()) {
