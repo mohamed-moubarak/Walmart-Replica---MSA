@@ -1,3 +1,4 @@
+package rabbitclient;
 import com.rabbitmq.client.*;
 
 import java.io.IOException;
