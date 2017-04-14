@@ -15,6 +15,8 @@ import com.json.parsers.JsonParserFactory;
 
 import io.netty.handler.codec.http.multipart.MixedAttribute;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 
 public class RequestParser implements Runnable {
@@ -27,59 +29,40 @@ public class RequestParser implements Runnable {
 		_clientHandle = clientHandle;
 	}
 
-	// public ClientRequest parseJSON(String jsonStr) {
-	//
-	// ClientRequest cr;
-	// String strAction, strSessionID;
-	// Map<String, Object> mapRequestData;
-	//
-	// strAction = "addUser";
-	// strSessionID = "sasdas";
-	// // mapRequestData= new M
-	//
-	// cr = new ClientRequest(strAction, strSessionID, mapRequestData);
-	//
-	// }
-
 	public void run() {
 		try {
-			System.out.println("Hello");
-			// clientHandle
-			String str = _clientHandle._serviceHandler.lst.get(0).toString();
-			System.out.println(str);
-			String jsonStr = str.substring(str.indexOf('{'));
-			System.out.println(jsonStr);
+			HttpRequest request = _clientHandle.getRequest();
 
-			JsonParserFactory factory = JsonParserFactory.getInstance();
+			HttpPostRequestDecoder postDecoder;
 
-			JSONParser parser = factory.newJsonParser();
+			if (request.method().compareTo(HttpMethod.POST) == 0) {
+				postDecoder = new HttpPostRequestDecoder(request);
+				List<InterfaceHttpData> lst = postDecoder.getBodyHttpDatas();
 
-			Map<String, Object> jsonData = parser.parseJson(jsonStr);
+				// clientHandle
+				String str = lst.get(0).toString();
+				String jsonStr = str.substring(str.indexOf('{'));
 
-			String strAction = jsonData.get("action").toString();
+				JsonParserFactory factory = JsonParserFactory.getInstance();
 
-			jsonStr = jsonStr.substring(jsonStr.indexOf('{', 1), jsonStr.length() - 1);
-			// jsonStr = jsonStr.substring(jsonStr.indexOf('{'));
-			System.out.println("User request : " + jsonStr);
+				JSONParser parser = factory.newJsonParser();
 
-			jsonData = parser.parseJson(jsonStr);
+				Map<String, Object> jsonData = parser.parseJson(jsonStr);
 
-			System.out.println(jsonData);
+				String strAction = jsonData.get("action").toString();
 
-			ClientRequest cr = new ClientRequest(strAction, "sad", jsonData);
+				jsonStr = jsonStr.substring(jsonStr.indexOf('{', 1), jsonStr.length() - 1);
 
-			System.out.println(" 1 " + cr._strAction);
-			System.out.println(" 2 " + cr._strSessionID);
-			System.out.println(" 3 " + cr._mapRequestData);
+				jsonData = parser.parseJson(jsonStr);
 
-			// System.out.println(toJson(jsonStr));
+				ClientRequest cr = new ClientRequest(strAction, "sessionID", jsonData);
 
-			// System.out.println(cr._strAction);
+				_parseListener.parsingFinished(_clientHandle, cr);
 
-			// System.out.println(fromJson(_clientHandle._httpRequest.toString()));
-			// Map<String, Object> _mapRequestData = new Map<String, Object>();
-			// ClientRequest cr = new ClientRequest("addUser", "23123", null);
-			_parseListener.parsingFinished(_clientHandle, cr);
+			} else {
+				System.out.println("The request is not a POST request");
+			}
+
 		} catch (Exception exp) {
 			_parseListener.parsingFailed(_clientHandle, "Exception while parsing JSON object " + exp.toString());
 		}

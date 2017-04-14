@@ -26,8 +26,6 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 
 	protected Controller _controller;
 
-	protected List<InterfaceHttpData> lst;
-
 	public ServicesHandler(Controller controller) {
 		_controller = controller;
 	}
@@ -73,7 +71,7 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 					HttpPostRequestDecoder postDecoder;
 
 					postDecoder = new HttpPostRequestDecoder(request);
-					lst = postDecoder.getBodyHttpDatas();
+					List<InterfaceHttpData> lst = postDecoder.getBodyHttpDatas();
 					int i = 1;
 					for (InterfaceHttpData temp : lst) {
 						System.out.println("hi there");
@@ -127,8 +125,6 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 		response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
 
 		if (keepAlive) {
-			System.out.println("RESPONSE WRITTEN !!");
-
 			// Add 'Content-Length' header only for a keep-alive connection.
 			response.headers().setInt(CONTENT_LENGTH, response.content().readableBytes());
 			// Add keep alive header as per:
@@ -136,8 +132,6 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 			// http://www.w3.org/Protocols/HTTP/1.1/draft-ietf-http-v11-spec-01.html#Connection
 			response.headers().set(CONNECTION, HttpHeaderValues.KEEP_ALIVE);
 		}
-
-		System.out.println("RESPONSE WRITTEN");
 
 		// Write the response.
 		ctx.write(response);
