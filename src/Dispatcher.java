@@ -7,6 +7,9 @@ import java.util.concurrent.*;
 
 import org.bson.*;
 import com.mongodb.*;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class Dispatcher {
@@ -38,9 +41,10 @@ public class Dispatcher {
 				Map<String, Object> map;
 				StringBuffer strbufResponse;
 				connection = _hikariDataSource.getConnection();
+				MongoDatabase mongodb = connectMongo();
 				// connection = null;
 				map = _clientRequest.getData();
-				strbufResponse = execute(connection, map);
+				strbufResponse = execute(connection, map, mongodb);
 
 				if (strbufResponse != null)
 					_clientHandle.passResponsetoClient(strbufResponse);
@@ -200,143 +204,83 @@ public class Dispatcher {
 			return strbufData;
 		}
 
-		public abstract StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception;
+		public abstract StringBuffer execute(Connection connection, Map<String, Object> mapUserData,
+				MongoDatabase mongodb) throws Exception;
 	}
 
-	 class AddtoCartCmd extends Command implements Runnable {
-	        
-	        public StringBuffer execute(Connection connection,  Map<String, Object> mapUserData, MongoCollection<Document> collection) throws Exception {
-	            
-				StringBuffer        strbufResult;
+	class AddtoCartCmd extends Command implements Runnable {
 
-				String strID;
-	            String itemID;
-	            String itemQty;
-	            strID    =   (String)mapUserData.get( "userID" );
-	            itemID    =   (String)mapUserData.get( "itemID" );
-	            itemQty   =   (String)mapUserData.get( "itemQty" );
-	            if( strID == null || strID.trim( ).length( ) == 0 ||  
-	                itemID == null || itemID.trim( ).length( ) == 0  ||
-	                itemQty == null || itemQty.trim( ).length( ) == 0)
-	               return null;
-	                List<Document> cart = (List<Document>) collection.find(Filters.eq("userID", strID))
-	                .into(new ArrayList<Document>());
+		public StringBuffer execute(Connection connection, Map<String, Object> mapUserData, MongoDatabase mongodb)
+				throws Exception {
 
-	            if (cart.isEmpty()) {
-	            Document doc = new Document("userID", strID).append("items", new Document(itemID, itemQty));
-	            collection.insertOne(doc);
-	             } else {
-	            if (!((Document) cart.get(0).get("items")).containsKey(itemID)) {
-	                ((Document) cart.get(0).get("items")).append(itemID, itemQty);
-	            } else {
-	                int old = Integer.parseInt((String) ((Document) cart.get(0).get("items")).get(itemID));
-	                ((Document) cart.get(0).get("items")).put(itemID, old + Integer.parseInt(itemQty) + "");
-	            }
-	            collection.replaceOne(Filters.eq("userID", strID), cart.get(0));
+			StringBuffer strbufResult;
+			MongoCollection<Document> collection = mongodb.getCollection("collectionName");
 
-	            }
-
-				strbufResult = makeJSONResponseEnvelope( strID , null, null );
-	            sqlProc.close( );
-				
-	            return strbufResult;
-	        }
-
-			@Override
-			public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
-				// TODO Auto-generated method stub
+			String strID;
+			String itemID;
+			String itemQty;
+			strID = (String) mapUserData.get("userID");
+			itemID = (String) mapUserData.get("itemID");
+			itemQty = (String) mapUserData.get("itemQty");
+			if (strID == null || strID.trim().length() == 0 || itemID == null || itemID.trim().length() == 0
+					|| itemQty == null || itemQty.trim().length() == 0)
 				return null;
+			List<Document> cart = (List<Document>) collection.find(Filters.eq("userID", strID))
+					.into(new ArrayList<Document>());
+
+			if (cart.isEmpty()) {
+				Document doc = new Document("userID", strID).append("items", new Document(itemID, itemQty));
+				collection.insertOne(doc);
+			} else {
+				if (!((Document) cart.get(0).get("items")).containsKey(itemID)) {
+					((Document) cart.get(0).get("items")).append(itemID, itemQty);
+				} else {
+					int old = Integer.parseInt((String) ((Document) cart.get(0).get("items")).get(itemID));
+					((Document) cart.get(0).get("items")).put(itemID, old + Integer.parseInt(itemQty) + "");
+				}
+				collection.replaceOne(Filters.eq("userID", strID), cart.get(0));
 			}
-	    }
-	class createTransactionCmd extends Command implements Runnable {
-	        
-	        public StringBuffer execute(Connection connection,  Map<String, Object> mapUserData,MongoCollection<Document> collection) throws Exception {
-	            
-	            CallableStatement   sqlProc;
-	            StringBuffer        strbufResult = null,
-	                                strbufResponseJSON;
-	            String              userID    =   ((String)mapUserData.get( "userID" ));
-	            if( userID == null || userID.trim( ).length( ) == 0)
-	                return null;
-	            
-	            List<Document> cart = (List<Document>) collection.find(Filters.eq("userID", strID)).into(new ArrayList<Document>());
-	            Document doc = ((Document) cart.get(0).get("items"));
-	            Collection<Object> x = doc.values();
-	            String[] a = doc.toString().substring(10, doc.toString().length() - 2).replaceAll("\\s", "").split(",");
-	            for (int i = 0; i < a.length; i++) {
-	                String[] b = a[i].split("=");
-	                sqlProc = connection.prepareCall("{?=call decreaseStock(?,?)}");
-	                sqlProc.registerOutParameter(1, Types.INTEGER);
-	                sqlProc.setString(2, b[0]);
-	                sqlProc.setString(3, b[1]);
-	                sqlProc.execute();
-	                int ID = sqlProc.getInt(1);
-	            }
-	            strbufResult = makeJSONResponseEnvelope(userID, null, null );
-	            sqlProc.close( );
-	            collection.deleteOne(Filters.eq("userID", strID));
-	            return strbufResult;
-	        
-	    
-	    }
 
-			@Override
-			public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
-				// TODO Auto-generated method stub
-				return null;
-			}
-	}
-
-		public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
-
-			CallableStatement sqlProc;
-			StringBuffer strbufResult = null, strbufResponseJSON;
-			String strSessionID, strEmail, strPassword, strFirstName, strClientIP;
-			int nSQLResult;
-
-			strEmail = ((String) mapUserData.get("email"));
-			strPassword = ((String) mapUserData.get("password"));
-
-			if (strEmail == null || strEmail.trim().length() == 0 || strPassword == null
-					|| strPassword.trim().length() == 0)
-				return null;
-
-			if (!EmailVerifier.verify(strEmail))
-				return null;
-
-			strClientIP = _clientHandle.getClientIP();
-			strSessionID = UUID.randomUUID().toString();
-
-			sqlProc = connection.prepareCall("{?=call attemptLogin(?,?,?,?)}");
-			sqlProc.registerOutParameter(1, Types.INTEGER);
-			sqlProc.setString(2, strEmail);
-			sqlProc.setString(3, strPassword);
-			sqlProc.setString(4, strSessionID);
-			sqlProc.setString(5, strClientIP);
-			sqlProc.execute();
-			nSQLResult = sqlProc.getInt(1);
-			sqlProc.close();
-			if (nSQLResult >= 0) {
-				Cache.addSession(strSessionID, strEmail);
-				System.err.println(" adding following session to Cache " + strSessionID);
-				Map<String, Object> mapResult = new HashMap<String, Object>();
-				mapResult.put("userID", Integer.toString(nSQLResult));
-				mapResult.put("sessionID", strSessionID);
-				sqlProc = connection.prepareCall("{?=call getUserFirstName(?)}");
-				sqlProc.registerOutParameter(1, Types.VARCHAR);
-				sqlProc.setInt(2, nSQLResult);
-				sqlProc.execute();
-				strFirstName = sqlProc.getString(1);
-				sqlProc.close();
-				mapResult.put("firstName", strFirstName);
-				strbufResponseJSON = serializeMaptoJSON(mapResult, null);
-				strbufResult = makeJSONResponseEnvelope(0, null, strbufResponseJSON);
-			} else
-				strbufResult = makeJSONResponseEnvelope(nSQLResult, null, null);
+			strbufResult = makeJSONResponseEnvelope(Integer.parseInt(strID), null, null);
 
 			return strbufResult;
 		}
-	
+	}
+
+	class createTransactionCmd extends Command implements Runnable {
+
+		public StringBuffer execute(Connection connection, Map<String, Object> mapUserData, MongoDatabase mongodb)
+				throws Exception {
+
+			MongoCollection<Document> collection = mongodb.getCollection("collectionName");
+
+			CallableStatement sqlProc;
+			StringBuffer strbufResult = null, strbufResponseJSON;
+			String userID = ((String) mapUserData.get("userID"));
+			if (userID == null || userID.trim().length() == 0)
+				return null;
+
+			List<Document> cart = (List<Document>) collection.find(Filters.eq("userID", userID))
+					.into(new ArrayList<Document>());
+			Document doc = ((Document) cart.get(0).get("items"));
+			Collection<Object> x = doc.values();
+			String[] a = doc.toString().substring(10, doc.toString().length() - 2).replaceAll("\\s", "").split(",");
+			for (int i = 0; i < a.length; i++) {
+				String[] b = a[i].split("=");
+				sqlProc = connection.prepareCall("{?=call decreaseStock(?,?)}");
+				sqlProc.registerOutParameter(1, Types.INTEGER);
+				sqlProc.setString(2, b[0]);
+				sqlProc.setString(3, b[1]);
+				sqlProc.execute();
+				int ID = sqlProc.getInt(1);
+				sqlProc.close();
+			}
+			strbufResult = makeJSONResponseEnvelope(Integer.parseInt(userID), null, null);
+			collection.deleteOne(Filters.eq("userID", userID));
+			return strbufResult;
+
+		}
+	}
 
 	protected void dispatchRequest(ClientHandle clientHandle, ClientRequest clientRequest) throws Exception {
 
@@ -377,6 +321,20 @@ public class Dispatcher {
 			Class<?> innerClass = Class.forName("Dispatcher$" + strClassName);
 			_htblCommands.put(strActionName, innerClass);
 		}
+	}
+
+	public static MongoDatabase connectMongo() {
+		MongoDatabase db = null;
+		try {
+			// To connect to mongodb server
+			MongoClient mongoClient = new MongoClient("localhost", 27017);
+			// Now connect to your databases
+			db = mongoClient.getDatabase("walmart");
+			System.out.println("Connect to mongo database successfully");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		return db;
 	}
 
 	protected void loadThreadPool() {

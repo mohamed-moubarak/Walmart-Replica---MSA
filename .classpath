@@ -16,15 +16,17 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/HikariCP-java6-2.3.1.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/boon-0.4.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/javassist.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/netty-all-5.0.0.Alpha2-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/postgresql-9.3-1102.jdbc41.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/slf4j-api-1.7.10.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/slf4j-jdk14-1.7.10.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/quick-json-1.0.2.3.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/mongo.jar"/>
-	<classpathentry kind="lib" path="/home/joseph/Desktop/MSA/bson-3.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/amqp-client-4.1.0.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/boon-0.4.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/HikariCP-java6-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/javassist.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/netty-all-5.0.0.Alpha2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/postgresql-9.3-1102.jdbc41.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/quick-json-1.0.2.3.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/slf4j-api-1.7.10.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/slf4j-jdk14-1.7.10.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/bson-3.3.0.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/mongodb-driver-3.3.0.jar"/>
+	<classpathentry kind="lib" path="/home/hesham/git workspace/Walmart-Replica---MSA/libs/mongodb-driver-core-3.3.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
