@@ -1,3 +1,4 @@
+package commands;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
@@ -11,6 +12,10 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.zaxxer.hikari.HikariDataSource;
+
+import controller.ClientHandle;
+import controller.ClientRequest;
+import controller.ResponseCodes;
 
 public class Dispatcher {
 
@@ -282,7 +287,7 @@ public class Dispatcher {
 		}
 	}
 
-	protected void dispatchRequest(ClientHandle clientHandle, ClientRequest clientRequest) throws Exception {
+	public void dispatchRequest(ClientHandle clientHandle, ClientRequest clientRequest) throws Exception {
 
 		Command cmd;
 		String strAction;
@@ -309,7 +314,7 @@ public class Dispatcher {
 	protected void loadCommands() throws Exception {
 		_htblCommands = new Hashtable();
 		Properties prop = new Properties();
-		InputStream in = getClass().getResourceAsStream("config/commands.properties");
+		InputStream in = getClass().getResourceAsStream("/config/commands.properties");
 		prop.load(in);
 		in.close();
 		Enumeration enumKeys = prop.propertyNames();
@@ -318,7 +323,7 @@ public class Dispatcher {
 		while (enumKeys.hasMoreElements()) {
 			strActionName = (String) enumKeys.nextElement();
 			strClassName = (String) prop.get(strActionName);
-			Class<?> innerClass = Class.forName("Dispatcher$" + strClassName);
+			Class<?> innerClass = Class.forName("commands.Dispatcher$" + strClassName);
 			_htblCommands.put(strActionName, innerClass);
 		}
 	}
