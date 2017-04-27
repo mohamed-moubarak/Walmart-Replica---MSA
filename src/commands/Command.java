@@ -81,10 +81,10 @@ public abstract class Command {
 					strbufJSON.append("\"responseData\":" + strbufResponseData); // if
 																					// it
 																					// is
-																					// a
-																					// list,
-																					// no
-																					// curley
+																				// a
+																				// list,
+																				// no
+																				// curley
 				else
 					strbufJSON.append("\"responseData\":{" + strbufResponseData + "}");
 			}

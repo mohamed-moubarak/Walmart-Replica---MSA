@@ -28,10 +28,15 @@ public class RequestParser implements Runnable {
 
 			if (request.method().compareTo(HttpMethod.POST) == 0) {
 				postDecoder = new HttpPostRequestDecoder(request);
+
+				System.out.println("REQ : " + request);
+
 				List<InterfaceHttpData> lst = postDecoder.getBodyHttpDatas();
 
-				// clientHandle
+				System.out.println("body DATAS: " + postDecoder.getBodyHttpDatas());
+
 				String str = lst.get(0).toString();
+				System.out.println("THIS : " + str);
 				String jsonStr = str.substring(str.indexOf('{'));
 
 				JsonParserFactory factory = JsonParserFactory.getInstance();
