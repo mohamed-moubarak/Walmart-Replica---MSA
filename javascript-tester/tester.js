@@ -25,7 +25,7 @@ function sendRequest_vista( strJSON, callbackfunc ){
 
 function sendRequest_win8( strJSON, callbackfunc ){
 
-	unirest.post('http://localhost:8080/')
+	unirest.post('http://localhost:8086/')
 	.header('Accept', 'application/json')
 	.header('Connection', 'Keep-Alive')
 	.send({ "SrvReq": strJSON })
@@ -109,7 +109,7 @@ function attemptLogoutResponse( err,httpResponse,body ){
 // addUser("abc@g.com","abcpass", "hesham", "wardany");
 // addUser("hany@a.com","hanypass", "ahmad", "hany");
 // addUser("bassem@y.com","bassempass", "mohamad", "bassem");
-addUser("attwa@s.net","attwapass", "mohamad", "attwa");
+addUser("attwa@s.net","attwapassword", "mohamad", "attwa");
 
 // "sessionID":"2bae123f-0034-4b90-99f3-30304272698d" user abc@g.com
 
