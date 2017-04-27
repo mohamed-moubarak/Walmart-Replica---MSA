@@ -15,18 +15,19 @@ function stripNewLineCharacter( strText ){
 
 
 function sendRequest_vista( strJSON, callbackfunc ){
-   
+
     request.cookie("");
-	request.post('http://localhost:8080/',
-				{ form: { SrvReq: strJSON } },
-				function(err,httpResponse,body){callbackfunc(err,httpResponse,body)}
-	);
+    request.post('http://localhost:8080/',
+        { form: { SrvReq: strJSON } },
+        function(err,httpResponse,body){callbackfunc(err,httpResponse,body)}
+        );
 }
 
 function sendRequest_win8( strJSON, callbackfunc ){
 
 	unirest.post('http://localhost:8080/')
 	.header('Accept', 'application/json')
+	.header('Connection', 'Keep-Alive')
 	.send({ "SrvReq": strJSON })
 	.end(function (response) {
 		console.log(response);
@@ -55,6 +56,26 @@ function addUserResponse( err,httpResponse,body ){
     console.log( body );
 }
 
+function editInfo( email, password, newPassword, firstname, lastname, picturePath, gender ){
+    var gsRequest           = new Object( );
+    gsRequest.action        = "editInfo";
+    var gsRequestData       = new Object( );
+    gsRequestData.email     = email;
+    gsRequestData.password  = password;
+    gsRequestData.newPassword  = newPassword;
+    gsRequestData.firstname  = firstname;
+    gsRequestData.lastname  = lastname;
+    gsRequestData.picturePath  = picturePath;
+    gsRequestData.gender  = gender;
+    gsRequest.data          = gsRequestData;
+    var strJSON = JSON.stringify(gsRequest);
+    sendRequest( strJSON, editInfoResponse );
+}
+
+function editInfoResponse( err,httpResponse,body ){
+    console.log( body );
+}
+
 function attemptLogin( email, password ){
 	var gsRequest           = 	new Object( );
     gsRequest.action        = 	"attemptLogin";
@@ -66,16 +87,47 @@ function attemptLogin( email, password ){
     sendRequest( strJSON, attemptLoginResponse );
 }
 
+function addToCart( id, productId, qty){
+	var gsRequest           = 	new Object( );
+    gsRequest.action        = 	"addCart";
+    var gsRequestData       = 	new Object( );
+    gsRequestData.userID	    = 	id;
+    gsRequestData.itemID	= 	productId;
+    gsRequestData.itemQty	= 	qty;
+    gsRequest.data          = 	gsRequestData;
+    var strJSON = JSON.stringify(gsRequest);    
+    sendRequest( strJSON, attemptLoginResponse );
+}
+
+function createTrans( id){
+	var gsRequest           = 	new Object( );
+    gsRequest.action        = 	"createTransaction";
+    var gsRequestData       = 	new Object( );
+    gsRequestData.userID	    = 	id;
+    gsRequest.data          = 	gsRequestData;
+    var strJSON = JSON.stringify(gsRequest);    
+    sendRequest( strJSON, attemptLoginResponse );
+}
+
 function attemptLoginResponse( err,httpResponse,body ){
     console.log( body );
 }
 
-// To start sending messages:
-//addUser("mohamed@m.com","johnpass", "john", "7amada");
-attemptLogin("mohamed@m.com","johnpass");
+// add users to the database
+// addUser("heshamww@g.com","heshampass", "hesham", "wardany");
+// addUser("hany@a.com","hanypass", "ahmad", "hany");
+// addUser("bassem@y.com","bassempass", "mohamad", "bassem");
+// // addUser("attwa@s.net","attwapass", "mohamad", "attwa");
+
+// attemptLogin("heshamww@g.com","heshampass");
+// attemptLogin("hany@a.com","hanypass");
+// attemptLogin("bassem@y.com","bassempass");
+// // attemptLogin("attwa@s.com","attwapass");
+
+addToCart(1234,1234, 1234);
+
+add(1234);
 
 
 
-      
 
-                  

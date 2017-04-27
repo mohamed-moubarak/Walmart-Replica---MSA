@@ -87,6 +87,28 @@ function attemptLogin( email, password ){
     sendRequest( strJSON, attemptLoginResponse );
 }
 
+function addToCart( id, productId, qty){
+	var gsRequest           = 	new Object( );
+    gsRequest.action        = 	"addCart";
+    var gsRequestData       = 	new Object( );
+    gsRequestData.userID	    = 	id;
+    gsRequestData.itemID	= 	productId;
+    gsRequestData.itemQty	= 	qty;
+    gsRequest.data          = 	gsRequestData;
+    var strJSON = JSON.stringify(gsRequest);    
+    sendRequest( strJSON, attemptLoginResponse );
+}
+
+function createTrans( id){
+	var gsRequest           = 	new Object( );
+    gsRequest.action        = 	"createTransaction";
+    var gsRequestData       = 	new Object( );
+    gsRequestData.userID	    = 	id;
+    gsRequest.data          = 	gsRequestData;
+    var strJSON = JSON.stringify(gsRequest);    
+    sendRequest( strJSON, attemptLoginResponse );
+}
+
 function attemptLoginResponse( err,httpResponse,body ){
     console.log( body );
 }
@@ -102,7 +124,9 @@ function attemptLoginResponse( err,httpResponse,body ){
 // attemptLogin("bassem@y.com","bassempass");
 // // attemptLogin("attwa@s.com","attwapass");
 
-editInfo("heshamww@g.com","heshampass", "heshamnewpass", "hesham", "el-wardany", "dummy/path/", "MALE");
+addToCart(1234,1234, 1234);
+
+createTrans(1234);
 
 
 

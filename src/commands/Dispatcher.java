@@ -1,4 +1,5 @@
 package commands;
+
 import java.io.*;
 import java.sql.*;
 import java.util.*;
@@ -272,10 +273,10 @@ public class Dispatcher {
 			String[] a = doc.toString().substring(10, doc.toString().length() - 2).replaceAll("\\s", "").split(",");
 			for (int i = 0; i < a.length; i++) {
 				String[] b = a[i].split("=");
-				sqlProc = connection.prepareCall("{?=call decreaseStock(?,?)}");
+				sqlProc = connection.prepareCall("{?=call decreasestock(?,?)}");
 				sqlProc.registerOutParameter(1, Types.INTEGER);
-				sqlProc.setString(2, b[0]);
-				sqlProc.setString(3, b[1]);
+				sqlProc.setInt(2, Integer.parseInt(b[0]));
+				sqlProc.setInt(3, Integer.parseInt(b[1]));
 				sqlProc.execute();
 				int ID = sqlProc.getInt(1);
 				sqlProc.close();
@@ -294,7 +295,8 @@ public class Dispatcher {
 		strAction = clientRequest.getAction();
 
 		Class<?> innerClass = (Class<?>) _htblCommands.get(strAction);
-		Class<?> enclosingClass = Class.forName("Dispatcher");
+		System.out.println("AABCD");
+		Class<?> enclosingClass = Class.forName("commands.Dispatcher");
 		Object enclosingInstance = enclosingClass.newInstance();
 		Constructor<?> ctor = innerClass.getDeclaredConstructor(enclosingClass);
 		cmd = (Command) ctor.newInstance(enclosingInstance);
@@ -347,7 +349,7 @@ public class Dispatcher {
 	}
 
 	public void init() throws Exception {
-		loadHikari("localhost", 5432, "mds", "postgres", "123");
+		loadHikari("localhost", 5432, "postgres", "postgres", "boyka_88");
 		loadThreadPool();
 		loadCommands();
 	}
