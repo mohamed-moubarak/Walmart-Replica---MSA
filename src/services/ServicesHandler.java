@@ -79,7 +79,6 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 					List<InterfaceHttpData> lst = postDecoder.getBodyHttpDatas();
 					int i = 1;
 					for (InterfaceHttpData temp : lst) {
-						System.out.println("hi there");
 						System.err.println(i + " " + temp.toString());
 						i++;
 					}

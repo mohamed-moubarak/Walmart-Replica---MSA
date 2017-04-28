@@ -1,14 +1,9 @@
 package controller;
 
-import java.util.*;
 import java.util.concurrent.*;
 
 import cache.Cache;
 import commands.Dispatcher;
-
-//import org.boon.json.*;
-
-import io.netty.channel.ChannelHandlerContext;
 
 public class Controller implements ParseListener {
 
@@ -26,11 +21,8 @@ public class Controller implements ParseListener {
 
 	public void execRequest(ClientHandle clientHandle) {
 
-		System.out.println("execRequest");
-
 		_threadPoolParsers.execute(new RequestParser(this, clientHandle));
 
-		System.out.println("execRequest after");
 	}
 
 	public synchronized void parsingFinished(ClientHandle clientHandle, ClientRequest clientRequest) {
@@ -38,10 +30,7 @@ public class Controller implements ParseListener {
 			String strAction;
 			strAction = clientRequest.getAction();
 
-			System.out.println(strAction);
-
 			if (strAction.equalsIgnoreCase("addCart") || strAction.equalsIgnoreCase("createTransaction")) {
-				System.out.println("dispatchrequest");
 				_dispatcher.dispatchRequest(clientHandle, clientRequest);
 			} else {
 				String strSessionID;
@@ -55,7 +44,6 @@ public class Controller implements ParseListener {
 			}
 		} catch (Exception exp) {
 			clientHandle.terminateClientRequest();
-			System.out.println("haha");
 			System.err.println(exp.toString());
 		}
 	}

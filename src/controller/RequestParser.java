@@ -1,20 +1,10 @@
 package controller;
 
-import java.io.ObjectOutputStream.PutField;
 import java.util.*;
-import java.util.Map.Entry;
 
-//import org.boon.json.*;
-//
-//import static org.boon.Boon.fromJson;
-//import static org.boon.Boon.puts;
-//import static org.boon.Boon.toJson;
-
-import com.codesnippets4all.json.*;
 import com.codesnippets4all.json.parsers.JSONParser;
 import com.codesnippets4all.json.parsers.JsonParserFactory;
 
-import io.netty.handler.codec.http.multipart.MixedAttribute;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
@@ -33,12 +23,17 @@ public class RequestParser implements Runnable {
 	public void run() {
 		try {
 			HttpRequest request = _clientHandle.getRequest();
+			System.out.println(request.uri());
+
+			System.out.println("RECEIVED : " + request.toString());
 
 			HttpPostRequestDecoder postDecoder;
 
 			if (request.method().compareTo(HttpMethod.POST) == 0) {
 				postDecoder = new HttpPostRequestDecoder(request);
 				List<InterfaceHttpData> lst = postDecoder.getBodyHttpDatas();
+
+				System.out.println(postDecoder.getBodyHttpDatas());
 
 				// clientHandle
 				String str = lst.get(0).toString();
@@ -56,7 +51,7 @@ public class RequestParser implements Runnable {
 
 				jsonData = parser.parseJson(jsonStr);
 
-				ClientRequest cr = new ClientRequest(strAction, "sessionID", jsonData);
+				ClientRequest cr = new ClientRequest(strAction, null, jsonData);
 
 				_parseListener.parsingFinished(_clientHandle, cr);
 

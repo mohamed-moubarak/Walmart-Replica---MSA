@@ -34,11 +34,10 @@ public class Dispatcher {
 		strAction = clientRequest.getAction();
 
 		Class<?> innerClass = (Class<?>) _htblCommands.get(strAction);
-		System.out.println("AABCD");
-		Class<?> enclosingClass = Class.forName("commands.Dispatcher");
-		Object enclosingInstance = enclosingClass.newInstance();
-		Constructor<?> ctor = innerClass.getDeclaredConstructor(enclosingClass);
-		cmd = (Command) ctor.newInstance(enclosingInstance);
+		// Class<?> enclosingClass = Class.forName("Dispatcher");
+		// Object enclosingInstance = enclosingClass.newInstance();
+		Constructor<?> ctor = innerClass.getDeclaredConstructor();
+		cmd = (Command) ctor.newInstance();
 		cmd.init(_hikariDataSource, clientHandle, clientRequest);
 
 		_threadPoolCmds.execute((Runnable) cmd);
