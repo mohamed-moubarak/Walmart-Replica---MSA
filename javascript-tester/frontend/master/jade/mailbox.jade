@@ -1,0 +1,260 @@
+extends layout/main-layout
+
+block active-item
+  - secondMenu['Extras']['active'] = 1
+  - secondMenu['Extras']['S']['Mailbox']['active'] = 1
+
+block content
+
+  h3 MailBox
+
+  ol.breadcrumb
+    li
+      a(href='#') Home
+    li
+      a(href='#') Mailbox
+    li.active Inbox
+
+  .row
+    .col-lg-2.col-md-12
+      .clearfix.mb-lg
+        button.btn.btn-sm.btn-default.hidden-lg.pull-right(type="button",data-toggle="collapse", data-target=".mb-boxes")
+          em.fa.fa-bars.fa-fw.fa-lg
+        button.btn.btn-purple(type="button") 
+          em.fa.fa-pencil
+          span Compose
+      ul.mb-boxes.nav.nav-pills.nav-stacked
+        li.p
+          small.text-muted MAILBOXES
+        li.active
+          a(href='#')
+            span.label.label-primary.pull-right 42
+            em.fa.fa-inbox.fa-fw.fa-lg
+            span Inbox
+        li
+          a(href='#') 
+            span.label.label-success.pull-right 10
+            em.fa.fa-star.fa-fw.fa-lg
+            span Starred
+        li
+          a(href='#') 
+            span.label.label-danger.pull-right 2
+            em.fa.fa-paper-plane-o.fa-fw.fa-lg
+            span Sent
+        li
+          a(href='#') 
+            span.label.label-warning.pull-right 5
+            em.fa.fa-edit.fa-fw.fa-lg
+            span Drafts
+        li
+          a(href='#') 
+            span.label.label-green.pull-right 12
+            em.fa.fa-trash-o.fa-fw.fa-lg
+            span Trash
+        li.p
+          small.text-muted TAGS
+        li
+          a.pv-sm(href='#')
+            span.point.point-green
+            span Green
+        li
+          a.pv-sm(href='#')
+            span.point.point-danger
+            span Red
+        li
+          a.pv-sm(href='#')
+            span.point.point-purple
+            span Purple
+        li
+          a.pv-sm(href='#')
+            span.point.point-info
+            span Skyblue
+    .clearfix.hidden-lg
+    .col-lg-5.col-sm-12
+      // START Mails
+      table.table.table-hover.mb-mails
+        //-
+          thead
+            tr
+              th.check-all
+                .checkbox.c-checkbox(data-toggle="tooltip",data-title="Check All")
+                  label
+                    input(type='checkbox')
+                    span.fa.fa-check
+              th Details
+        tbody
+          tr.mb-mail-active
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/01.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Adrian Davis
+                .mb-mail-subject Vestibulum vel dui vel magna vulputate
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/02.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Abigail Rose
+                .mb-mail-subject Nulla dictum egestas leo at lobortis. 
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/03.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Wallace Thompson
+                .mb-mail-subject Aliquam erat volutpat.
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/04.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Leo Hamilton
+                .mb-mail-subject Aliquam erat volutpat.
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/05.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Kirk Larson
+                .mb-mail-subject Suspendisse faucibus bibendum ipsum, et feugiat
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/06.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Tomothy Lane
+                .mb-mail-subject Aliquam erat volutpat.
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/07.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Dwight Diaz
+                .mb-mail-subject Aliquam erat volutpat.
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/08.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Albert Campbell
+                .mb-mail-subject Suspendisse ullamcorper eros eget
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/09.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Lynn Foster
+                .mb-mail-subject Suspendisse ullamcorper eros eget
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/10.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Liam Reid
+                .mb-mail-subject Suspendisse ullamcorper eros eget
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+          tr
+            td
+              .checkbox.c-checkbox
+                label
+                  input(type='checkbox')
+                  span.fa.fa-check
+            td 
+              .mb-mail-date 10:30pm
+              img.mb-mail-avatar(src="app/img/user/11.jpg", alt="Mail Avatar")
+              .pull-left
+                .mb-mail-from Robin Ortiz
+                .mb-mail-subject Nam enim libero, lacinia a tristique a
+              .mb-mail-preview Pellentesque habitant morbi tristique senectus et netus et malesuada fames ... 
+      // END Mails
+
+    .col-md-5.visible-md.visible-lg
+      .mb-panel
+        .clearfix.mb
+          .btn-group.pull-left
+            button.btn.btn-default.btn-sm(type="button")
+              em.fa.fa-mail-reply.text-gray-dark
+            button.btn.btn-default.btn-sm(type="button")
+              em.fa.fa-mail-reply-all.text-gray-dark
+            button.btn.btn-default.btn-sm(type="button")
+              em.fa.fa-mail-forward.text-gray-dark
+          .btn-group.pull-right
+            button.btn.btn-default.btn-sm(type="button")
+              em.fa.fa-exclamation.text-gray-dark
+            button.btn.btn-default.btn-sm(type="button")
+              em.fa.fa-times.text-gray-dark
+
+        h3 Praesent id leo lectus. 
+        .clearfix
+          p.pull-left.m0
+            span.text-muted.mr From: 
+            a(href="#") John Doe
+          p.pull-right.m0
+            span 10:56 pm
+        hr
+        
+        p: img.img-responsive(src="app/img/mb-sample.jpg",alt="Mailbox image")
+        p.text-md Pellentesque vitae turpis id lorem dictum suscipit vitae sit amet leo. Duis imperdiet, enim vitae euismod mattis, lectus nibh interdum felis, quis eleifend orci orci sed quam. Fusce a egestas turpis. Etiam tellus nulla, dictum in pellentesque feugiat, sagittis non lectus. 
+        hr
+        form.mb-panel-form(action="/")
+          textarea.form-control.mb-panel-form-reply(placeholder="Click here to reply")

@@ -1,0 +1,37 @@
+//- Extends the page layout
+extends ../layout/page-layout
+
+block content
+
+  .row.row-table.page-wrapper
+    .col-lg-3.col-md-6.col-sm-8.col-xs-12.align-middle
+      // START panel
+      .panel.panel-dark.panel-flat(data-toggle="play-animation",data-play="fadeIn",data-offset="0")
+        .panel-heading.text-center.mb-lg
+          a(href="#")
+            img.block-center.img-rounded(src='../app/img/logo.png', alt='Image')
+          p.text-center.mt-lg
+            strong SIGNUP TO GET INSTANT ACCESS.
+        .panel-body
+          form(role='form')
+            .form-group.has-feedback
+              label.text-muted(for='signupInputEmail1') Email address
+              input#signupInputEmail1.form-control(type='email', placeholder='Enter email')
+              span.fa.fa-envelope.form-control-feedback.text-muted
+            .form-group.has-feedback
+              label.text-muted(for='signupInputPassword1') Password
+              input#signupInputPassword1.form-control(type='password', placeholder='Password')
+              span.fa.fa-lock.form-control-feedback.text-muted
+            .form-group.has-feedback
+              label.text-muted(for='signupInputRePassword1') Retype Password
+              input#signupInputRePassword1.form-control(type='password', placeholder='Retype Password')
+              span.fa.fa-lock.form-control-feedback.text-muted
+            .clearfix
+              .checkbox.c-checkbox.pull-left.mt0
+                label
+                  input(type='checkbox', value='')
+                  span.fa.fa-check
+                  |  I agree with the 
+                  a(href="#") terms
+            button.btn.btn-block.btn-success(type='submit') Register                
+      // END panel

@@ -1,0 +1,13 @@
+extends layout/main-layout
+
+block active-item
+  - secondMenu['Maps']['active'] = 1
+  - secondMenu['Maps']['S']['Vector Maps']['active'] = 1
+
+block content
+  
+  h3 Vector Maps
+    br
+    small Resolution independent maps
+
+  #vectormap(data-toggle='vector-map', style='height: 700px;')
