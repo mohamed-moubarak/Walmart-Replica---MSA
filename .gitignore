@@ -4,3 +4,5 @@
 *.classpath
 messagesApp/target
 userApp/target
+messagesApp/.settings
+userApp/.settings
