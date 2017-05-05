@@ -1,0 +1,16 @@
+// Labels
+
+
+.label-variant(@color) {
+  //background-color: @color;
+  color: @color;
+  border: 1px solid @color;
+  &[href] {
+    &:hover,
+    &:focus {
+      color: darken(@color, 10%);
+      border-color: darken(@color, 10%);
+      //background-color: darken(@color, 10%);
+    }
+  }
+}

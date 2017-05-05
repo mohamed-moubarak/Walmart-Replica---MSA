@@ -1,0 +1,262 @@
+/**
+ * 
+ * Wintermin - Bootstrap Admin Theme - Landing Page Stylesheet
+ * 
+ * Author: @geedmo
+ * Website: http://geedmo.com
+ * License: Codecanyon Regular License
+ * 
+ */
+
+/* ========================================================================
+
+[Table of contents]
+
+1. Body
+2. Header
+  2.1 Logo / .logo-wrapper
+  2.2 Header content / .header-content
+3 Clients / #clients 
+4 Testimonials / #testimonials 
+5 Call to action / #callout
+6 List of Features / .feature-list 
+7 Footers
+  7.1 Top footer / .footer-1
+  7.2 Bottom footer / .footer-2
+
+ ========================================================================== */
+
+@import "_variables";
+
+// BODY
+
+body {
+  background-color: #f1f2f3;
+  font-size: 16px;
+  line-height: 1.6;
+  // consistent spacing
+  > section,
+  > footer {
+    font-size: 14px;
+    padding: 80px 0;
+  }
+}
+
+
+// HEADER LAYOUT
+
+header {
+  min-height: 100%;
+  padding-bottom: 60px;
+  text-align: center;
+  background-image: url('../img/landing/background.jpg');
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-attachment: fixed;
+
+  > .container {
+    min-height: 100%;
+  }
+
+  nav {
+    padding: 40px 0 20px;
+  }
+
+  .app-logo, 
+  .menuapp-buttons {
+    font-size: 14px;
+    //text-asign: center;
+    margin-bottom: 30px;
+    a {
+      text-decoration: none !important;
+    }
+  }
+
+  @media @desktop {
+    
+    background-size: 100% 100%;
+    //height: 100%;
+    padding-bottom: 0;
+    
+    .app-logo {
+      text-align: left;
+      margin-bottom: 0;
+    }
+    .menuapp-buttons {
+      text-align: right;
+    }
+  }
+}
+
+// CONTENT INSIDE THE HEADER
+
+.header-content {
+  height: 80%;
+  color: #fff;
+  
+  // reset row table on mobiles
+  .row-table {
+    &, & > [class*="col-"]  {
+      display: block;
+    }
+  }
+
+  .header-title {
+    font-size: 35px;
+    line-height: 1.2;
+  }
+  .header-subtitle {
+    font-size: 18px;
+  }
+  .header-button {
+    margin: 60px 0;
+  }
+
+  @media @desktop {
+
+    color: #888;
+
+    .header-title {
+      font-size: 55px;
+    }
+
+    // restore row table on desktops
+    .row-table {
+      display: table;
+      > [class*="col-"] {
+        display: table-cell;
+      }
+    }
+
+    .app-presentation {
+      margin-right: -12%;
+    }
+    .side-presentation {
+      text-align: left;
+      padding-left: 15%;
+    }
+  }
+}
+
+
+.logo-wrapper {
+  display: inline-block;
+  //max-width: 90px;
+  height: auto;
+  margin-top: -15px;
+}
+
+.store-list {
+  margin: 20px 0;
+  > li {
+    max-width: 140px;
+    padding-left: 0;
+  }
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+// CLIENT / PARTNERS LOGO
+
+#clients {
+  img {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+}
+
+// TESTIMONIAL SLIDER
+
+#testimonial {
+  .carousel {
+    min-height: 200px;
+    .item {
+      text-align: center;
+      margin: 0 auto;
+      > .row {
+        margin-bottom: 50px;
+      }
+      h4 {
+        font-weight: normal;
+        font-style: italic;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+
+// CALLUOT WITH BG IMAGE
+
+#callout {
+  background-image: url('../img/landing/callout.jpg');
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-attachment: fixed;
+  @media @desktop {
+    background-size: 100% auto;
+  }
+}
+
+// LIST AROUND BIG IMAGES
+
+.feature-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  > li {
+    margin-bottom: 30px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    @media @desktop {
+      margin-bottom: 70px;
+    }
+  }
+  .point {
+    margin-bottom: 1px;
+  }
+}
+
+// FOOTERS 
+
+.footer-1 {
+  form, nav {
+    > h5 {
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+  nav > ul > li > a {
+    color: #989898;
+    &:hover, &:focus {
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+}
+
+.footer-2 {
+  padding-top: 0 !important;
+  padding-bottom: 30px;
+  background-color: #333;
+  text-align: center;
+  a {
+    color: #989898;
+  }
+  p {
+    margin: 0;
+  }
+  [class*="col-"] {
+    padding-top: 30px;
+  }
+
+  @media @desktop {
+    text-align: left;
+  }
+}

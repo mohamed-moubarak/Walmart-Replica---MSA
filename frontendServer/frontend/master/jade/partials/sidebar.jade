@@ -1,0 +1,58 @@
+
+
+// START Sidebar (left)
+nav.sidebar
+  block menu-profile
+
+  ul.nav
+    
+    // START Menu
+    li.nav-heading Main
+    +build-menu-items(firstMenu)
+    li.nav-heading More
+    +build-menu-items(secondMenu)
+    
+    // START Theme color options
+    li
+      a.has-submenu(href="#", title="Color options", data-toggle="collapse-next")
+        em.fa.fa-tint
+        //-.label.label-primary.pull-right= val.alert
+        span.item-text Themes
+      // START SubMenu item
+      ul.nav.collapse
+        li
+          a.no-submenu(href="#", title="Option 1", data-toggle="load-css", data-uri="app/css/wintermin-theme-a.css")
+            span.item-text Color option 1
+        li
+          a.no-submenu(href="#", title="Option 2", data-toggle="load-css", data-uri="app/css/wintermin-theme-b.css")
+            span.item-text Color option 2
+        li
+          a.no-submenu(href="#", title="Option 3", data-toggle="load-css", data-uri="app/css/wintermin-theme-c.css")
+            span.item-text Color option 3
+        li
+          a.no-submenu(href="#", title="Option 4", data-toggle="load-css", data-uri="app/css/wintermin-theme-d.css")
+            span.item-text Color option 4
+        li
+          a.no-submenu(href="#", title="Default", data-toggle="load-css", data-uri="#")
+            span.item-text Default
+      // END SubMenu item
+    // END Theme color options
+
+    li
+      ul.nav-labels
+        li.nav-heading Labels
+        li.nav-labels-item
+          span.point.point-lg.point-success.point-outline
+          a(href="#") Label A
+        li.nav-labels-item
+          span.point.point-lg.point-danger.point-outline
+          a(href="#") Label B
+        li.nav-labels-item
+          span.point.point-lg.point-info.point-outline
+          a(href="#") Label C
+        li.nav-labels-item
+          span.point.point-lg.point-warning.point-outline
+          a(href="#") Label D
+    // END Menu
+
+// END Sidebar (left)

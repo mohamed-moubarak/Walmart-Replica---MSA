@@ -1,0 +1,66 @@
+extends layout/main-layout
+
+block active-item
+  - secondMenu['Maps']['active'] = 1
+  - secondMenu['Maps']['S']['Google Maps']['active'] = 1
+
+block content
+  
+  h3 Google Maps
+    br
+    small Easy usage directly from data attribute
+
+  .row
+    .col-md-6
+      .panel.panel-default
+        .panel-heading Classic Map
+        .panel-body
+          .gmap(data-toggle="gmap", data-address="Little Lonsdale St, Melbourne, Victoria 8011 Australia")
+    .col-md-6
+      .panel.panel-default
+        .panel-heading Custom zoom
+        .panel-body
+          .gmap(data-toggle="gmap", data-address="Little Lonsdale St, Melbourne, Victoria 8011 Australia", data-zoom="19")
+  .row
+    .col-md-6
+      .panel.panel-default
+        .panel-heading Different Map Type
+        .panel-body
+          .gmap(data-toggle="gmap", data-address="Little Lonsdale St, Melbourne, Victoria 8011 Australia", data-maptype="SATELLITE")
+    .col-md-6
+      .panel.panel-default
+        .panel-heading Multiple Addresses
+        .panel-body
+          .gmap(data-toggle="gmap", data-address="Little Lonsdale St, Melbourne, Victoria 8011 Australia; 2 Elizabeth St, Melbourne, Victoria 3000 Australia", data-title="Location 1; Location 2")
+
+  .row
+    .col-md-12
+      .panel.panel-default
+        .panel-heading Styled Maps
+        .panel-body
+          .gmap(data-toggle="gmap", data-address="Little Lonsdale St, Melbourne, Victoria 8011 Australia", data-maptype="ROADMAP", data-styled)
+
+  .row
+    .col-md-12
+      .panel.panel-default
+        .panel-heading Map in modal
+        .panel-body
+          // Button trigger modal 
+          button.btn.btn-primary.btn-lg(data-toggle='modal', data-target='#myMapModal')
+            | Launch Map Modal
+
+
+
+block body_child
+  // START modal
+  #myMapModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myMapModalLabel', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+          h4#myMapModalLabel.modal-title Google Map Modal
+        .modal-body
+          .gmap(data-toggle="gmap", data-address="Little Lonsdale St, Melbourne, Victoria 8011 Australia", data-maptype="ROADMAP", data-styled)
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') Close
+  // END modal

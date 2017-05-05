@@ -1,0 +1,153 @@
+extends layout/main-layout
+
+block active-item
+  - secondMenu['Extras']['active'] = 1
+  - secondMenu['Extras']['S']['Filebox']['active'] = 1
+
+block content
+
+  h3 Files box
+
+  .row
+    .col-lg-2.col-md-3.col-md-12
+      ul.nav.nav-pills.nav-stacked
+        li.p
+          small.text-muted Categories
+        li.active
+          a(href='#', data-filter-tag="all")
+            span.label.label-primary.pull-right 33
+            em.fa.fa-folder-o.fa-fw.fa-lg
+            span All
+        li
+          a(href='#', data-filter-tag="audio")
+            span.label.label-primary.pull-right 12
+            em.fa.fa-folder-o.fa-fw.fa-lg
+            span Audio
+        li
+          a(href='#', data-filter-tag="movie") 
+            span.label.label-danger.pull-right 3
+            em.fa.fa-folder-o.fa-fw.fa-lg
+            span Movies
+        li
+          a(href='#', data-filter-tag="image") 
+            span.label.label-warning.pull-right 8
+            em.fa.fa-folder-o.fa-fw.fa-lg
+            span Images
+        li
+          a(href='#', data-filter-tag="archive") 
+            span.label.label-success.pull-right 4
+            em.fa.fa-folder-o.fa-fw.fa-lg
+            span Archives
+        li
+          a(href='#', data-filter-tag="code") 
+            span.label.label-purple.pull-right 6
+            em.fa.fa-folder-o.fa-fw.fa-lg
+            span Codes
+
+    .col-lg-10.col-md-9.col-sm-12
+      .row
+        .col-lg-3.col-md-4
+          +filebox-audio('Electus - Cosmology.ogg','6.3MB','10m')
+        .col-lg-3.col-md-4
+          +filebox-movie('LOTR-III.avi','6.3GB','50m')
+        .col-lg-3.col-md-4
+          +filebox-audio('Cytran - Phenakism.mp3', '12MB', '20h')
+        .col-lg-3.col-md-4
+          +filebox-image('Mountain-Lion.jpg','300KB','1d')
+
+        .col-lg-3.col-md-4
+          +filebox-archive('Results.txt', '1MB', '15h')
+        .col-lg-3.col-md-4
+          +filebox-audio('MTNS - Lost Track of Time.ogg','4.5MB','5m')
+        .col-lg-3.col-md-4
+          +filebox-code('bypass.c','3KB','2h')
+        .col-lg-3.col-md-4
+          +filebox-image('Sunset_red.png','450KB','3d')
+
+        .col-lg-3.col-md-4
+          +filebox-image('Sunset_red.png','450KB','3d')
+        .col-lg-3.col-md-4
+          +filebox-code('transclusion.js','5KB','23h')
+        .col-lg-3.col-md-4
+          +filebox-audio('MTNS - Lost Track of Time.ogg','4.5MB','5m')
+        .col-lg-3.col-md-4
+          +filebox-audio('Cytran - Phenakism.mp3', '12MB', '20h')
+
+        .col-lg-3.col-md-4
+          +filebox-audio('MTNS - Lost Track of Time.ogg','4.5MB','5m')
+        .col-lg-3.col-md-4
+          +filebox-code('components.css','78KB','12h')
+        .col-lg-3.col-md-4
+          +filebox-image('Sunset_red.png','450KB','3d')
+        .col-lg-3.col-md-4
+          +filebox-archive('Results.txt', '1MB', '15h')
+
+        .col-lg-3.col-md-4
+          +filebox-audio('Electus - Cosmology.ogg','6.3MB','10m')
+        .col-lg-3.col-md-4
+          +filebox-movie('LOTR-III.avi','6.3GB','50m')
+        .col-lg-3.col-md-4
+          +filebox-audio('Cytran - Phenakism.mp3', '12MB', '20h')
+        .col-lg-3.col-md-4
+          +filebox-image('Mountain-Lion.jpg','300KB','1d')
+
+        .col-lg-3.col-md-4
+          +filebox-audio('MTNS - Lost Track of Time.ogg','4.5MB','5m')
+        .col-lg-3.col-md-4
+          +filebox-code('components.css','78KB','12h')
+        .col-lg-3.col-md-4
+          +filebox-image('Sunset_red.png','450KB','3d')
+        .col-lg-3.col-md-4
+          +filebox-archive('Results.txt', '1MB', '15h')
+
+        .col-lg-3.col-md-4
+          +filebox-image('Sunset_red.png','450KB','3d')
+        .col-lg-3.col-md-4
+          +filebox-code('transclusion.js','5KB','23h')
+        .col-lg-3.col-md-4
+          +filebox-audio('MTNS - Lost Track of Time.ogg','4.5MB','5m')
+        .col-lg-3.col-md-4
+          +filebox-audio('Cytran - Phenakism.mp3', '12MB', '20h')
+
+mixin filebox-code(name, size, time)
+  +filebox('code','fa-file-code-o', 'text-purple', name, size, time, 'edit')
+
+mixin filebox-archive(name, size, time)
+  +filebox('archive','fa-file-archive-o', 'text-warning', name, size, time, 'edit')
+
+mixin filebox-movie(name, size, time)
+  +filebox('movie','fa-file-movie-o', 'text-danger', name, size, time, 'play')
+
+mixin filebox-image(name, size, time)
+  +filebox('image','fa-file-image-o', 'text-success', name, size, time, 'view')
+
+mixin filebox-audio(name, size, time)
+  +filebox('audio','fa-file-audio-o', 'text-primary', name, size, time, 'play')
+
+mixin filebox(type, icon, color, name, size, time, mode)
+  .panel.discoverer(data-filter-group="#{type}")
+    .panel-body.text-center
+      .clearfix.discover
+        - if ( mode == 'play' )
+          .pull-left
+            a(href="#", title="Play").label.label-primary.mr-sm
+              em.fa.fa-play.fa-fw
+        - if ( mode == 'edit' )
+          .pull-left
+            a(href="#", title="Edit").label.label-primary.mr-sm
+              em.fa.fa-pencil.fa-fw
+        - if ( mode == 'view' )
+          .pull-left
+            a(href="#", title="View").label.label-primary.mr-sm
+              em.fa.fa-eye.fa-fw
+        .pull-right
+          a(href="#", title="Download").label.label-success.mr-sm
+            em.fa.fa-download.fa-fw
+          a(href="#", title="Remove").label.label-danger
+            em.fa.fa-times.fa-fw
+      .file-icon.ph-lg
+        em.fa.fa-5x(class="#{icon} #{color}")
+      h4.text-dark.text-ellipsis= name
+      .clearfix.m0.text-muted
+        small.pull-right= size
+        small.pull-left= time
