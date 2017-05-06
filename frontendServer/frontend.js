@@ -260,3 +260,98 @@ app.post('/fetchmessages', function (req, res) {
   });
 
 })
+
+app.post('/transaction', function (req, res) {
+
+  var randomID = Math.floor((Math.random() * 1000000) + 1);
+
+  // login user
+  let data = JSON.stringify(
+    {
+      "randomID": randomID,
+      "action": "addtoCart",
+      "data": {
+        "itemID": req.body.itemID,
+        "Quantity": "1",
+        "userID": req.session.userID
+      }
+    }
+  );
+
+  publish("transactionApp", data);
+
+  amqp.connect('amqp://localhost:5673', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      var q = 'transactionAppResponse';
+      ch.assertQueue(q, { durable: false });
+      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+      ch.consume(q, function (msg) {
+        jsonObject = JSON.parse(msg.content.toString());
+        console.log(jsonObject);
+        if (jsonObject.randomID == randomID) {
+          console.log("match!!");
+          if (jsonObject.object.StatusID == "200") {
+            console.log("read session");
+            req.session.sessionId = jsonObject.object.responseData.sessionID;
+            res.send({ success: "true" });
+          }
+          else {
+            console.log("session");
+            res.send({});
+          }
+          conn.close();
+        } else {
+          console.log("no");
+          publish(q, msg);
+        }
+      }, { noAck: true });
+    });
+  });
+})
+
+
+app.post('/buy', function (req, res) {
+
+  var randomID = Math.floor((Math.random() * 1000000) + 1);
+
+  // login user
+  let data = JSON.stringify(
+    {
+      "randomID": randomID,
+      "action": "createTransaction",
+      "data": {
+        "userID": req.session.userID
+      }
+    }
+  );
+
+  publish("transactionApp", data);
+
+  amqp.connect('amqp://localhost:5673', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      var q = 'transactionAppResponse';
+      ch.assertQueue(q, { durable: false });
+      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+      ch.consume(q, function (msg) {
+        jsonObject = JSON.parse(msg.content.toString());
+        console.log(jsonObject);
+        if (jsonObject.randomID == randomID) {
+          console.log("match!!");
+          if (jsonObject.object.StatusID == "200") {
+            console.log("read session");
+            req.session.sessionId = jsonObject.object.responseData.sessionID;
+            res.send({ success: "true" });
+          }
+          else {
+            console.log("session");
+            res.send({});
+          }
+          conn.close();
+        } else {
+          console.log("no");
+          publish(q, msg);
+        }
+      }, { noAck: true });
+    });
+  });
+})

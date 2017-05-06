@@ -14,7 +14,7 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 public final class Services {
 
 	public static final boolean SSL = System.getProperty("ssl") != null;
-	public static final int PORT = Integer.parseInt(SSL ? "88" : "8081");
+	public static final int PORT = Integer.parseInt(SSL ? "88" : "8082");
 
 	protected static Controller _controller;
 

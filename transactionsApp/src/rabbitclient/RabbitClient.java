@@ -17,8 +17,8 @@ import java.util.concurrent.TimeoutException;
 
 public class RabbitClient {
 
-	private final static String QUEUE_NAME = "messagesApp";
-	private final static String RESPONSE_QUEUE_NAME = "messagesAppResponse";
+	private final static String QUEUE_NAME = "transactionApp";
+	private final static String RESPONSE_QUEUE_NAME = "transactionAppResponse";
 
 	public static String executePost(String targetURL, String urlParameters) {
 		HttpURLConnection connection = null;
@@ -103,7 +103,7 @@ public class RabbitClient {
 
 				String randomID = jsonData.get("randomID").toString();
 
-				response = executePost("http://localhost:8081", "SrvReq=" + message);
+				response = executePost("http://localhost:8082", "SrvReq=" + message);
 				try {
 					response = "{\"randomID\":" + "\"" + randomID + "\"," + "\"object\":" + response + "}";
 					publish(response);
