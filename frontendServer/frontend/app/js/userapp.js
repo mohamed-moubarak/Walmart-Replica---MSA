@@ -8,7 +8,6 @@ function redirect(data) {
 
 $('#login').submit(function (e) {
   e.preventDefault();
-  console.log("hello world");
   let email = $('#inputEmail').val();
   let pass = $('#inputPassword').val();
   let req = {
@@ -27,7 +26,6 @@ $('#login').submit(function (e) {
 
 $('#signup').submit(function (e) {
   e.preventDefault();
-  console.log("hello world");
   let email = $('#signupInputEmail').val();
   let pass = $('#signupInputPassword').val();
   let firstName = $('#signupFirstName').val();

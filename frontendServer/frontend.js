@@ -129,28 +129,85 @@ app.post('/register', function (req, res) {
     }
   );
 
-  // Publish to userApp queue
+  publish("userApp", data);
+
   amqp.connect('amqp://localhost:5673', function (err, conn) {
     conn.createChannel(function (err, ch) {
-      var q = 'userApp';
+      var q = 'userAppResponse';
       ch.assertQueue(q, { durable: false });
-      ch.sendToQueue(q, new Buffer(data));
+      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+      ch.consume(q, function (msg) {
+        jsonObject = JSON.parse(msg.content.toString());
+        console.log(jsonObject);
+        if (jsonObject.randomID == randomID) {
+          console.log("match!!");
+          if (jsonObject.object.StatusID == "0") {
+            console.log("read session");
+            req.session.sessionId = jsonObject.object.responseData.sessionID;
+            res.send({ redirect: '/' });
+          }
+          else {
+            console.log("session");
+            res.send({ redirect: '/login' });
+          }
+          conn.close();
+        } else {
+          console.log("no");
+          publish(q, msg);
+        }
+      }, { noAck: true });
     });
-    setTimeout(function () { conn.close(); process.exit(0) }, 500);
   });
 
-  var receivedMessage;
-  while (receivedMessage == null) {
-    receivedMessage = inBoundMessages[randomID];
-  }
+})
 
-  receivedJsonObject = JSON.parse(receivedMessage);
+// Handle POST REQUEST localhost/register
+app.post('/editInfo', function (req, res) {
 
-  if (receivedJsonObject.status == "200") {
-    req.session.sessionId = receivedMessage.sessionId;
-    res.send({ redirect: '/' });
-  }
-  else {
-    res.send({ redirect: '/login' });
-  }
+  var randomID = Math.floor((Math.random() * 1000000) + 1);
+
+  // register user
+  let data = JSON.stringify(
+    {
+      "randomID": randomID,
+      "action": "editInfo",
+      "data": {
+        "email": req.body.email,
+        "password": req.body.password,
+        "firstname": req.body.firstname,
+        "lastname": req.body.lastname
+      }
+    }
+  );
+
+  publish("userApp", data);
+
+  amqp.connect('amqp://localhost:5673', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      var q = 'userAppResponse';
+      ch.assertQueue(q, { durable: false });
+      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+      ch.consume(q, function (msg) {
+        jsonObject = JSON.parse(msg.content.toString());
+        console.log(jsonObject);
+        if (jsonObject.randomID == randomID) {
+          console.log("match!!");
+          if (jsonObject.object.StatusID == "0") {
+            console.log("read session");
+            req.session.sessionId = jsonObject.object.responseData.sessionID;
+            res.send({ redirect: '/' });
+          }
+          else {
+            console.log("session");
+            res.send({ redirect: '/login' });
+          }
+          conn.close();
+        } else {
+          console.log("no");
+          publish(q, msg);
+        }
+      }, { noAck: true });
+    });
+  });
+  
 })
