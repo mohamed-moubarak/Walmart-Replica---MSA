@@ -26,11 +26,8 @@ public class Controller implements ParseListener {
 
 	public void execRequest(ClientHandle clientHandle) {
 
-		System.out.println("execRequest");
-
 		_threadPoolParsers.execute(new RequestParser(this, clientHandle));
 
-		System.out.println("execRequest after");
 	}
 
 	public synchronized void parsingFinished(ClientHandle clientHandle, ClientRequest clientRequest) {

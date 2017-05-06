@@ -1,4 +1,5 @@
 package commands;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Types;
@@ -7,6 +8,8 @@ import java.util.Map;
 public class AddUserSimpleCmd extends Command implements Runnable {
 
 	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
+
+		System.out.println("I AM HERE");
 
 		StringBuffer strbufResult;
 		CallableStatement sqlProc;

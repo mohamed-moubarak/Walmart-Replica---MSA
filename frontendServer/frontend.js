@@ -11,113 +11,146 @@ app.use(express.static(__dirname + '/frontend'))
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(cookieParser("sdd", {signed: true}));
-app.use(expressSession({secret:'somesecrettokenhere',
-	resave: false,
-	saveUninitialized: true}));
+app.use(cookieParser("sdd", { signed: true }));
+app.use(expressSession({
+  secret: 'somesecrettokenhere',
+  resave: false,
+  saveUninitialized: true
+}));
 
-app.use(function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type');
-	next();
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
 });
 
 app.listen(3000, function () {
-	console.log('FrontEnd app listening on port 3000!')
+  console.log('FrontEnd app listening on port 3000!')
 })
 
+var publish = function (queueName, data) {
+  amqp.connect('amqp://localhost:5673', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      ch.assertQueue(queueName, { durable: false });
+      ch.sendToQueue(queueName, new Buffer(data));
+      console.log(" [x] Sent %s", data);
+    });
+    // setTimeout(function () { conn.close(); process.exit(0) }, 500);
+  });
+}
+
+// Handle GET REQUEST localhost/
 app.get('/', function (req, res) {
   // if user not logged in (redirect to login)
-
-  if(!req.session.sessionId){
-  	res.redirect('/login');
-  }else{
-  	res.sendFile(path.join(__dirname + '/frontend/pages/index.html'));
+  if (!req.session.sessionId) {
+    res.redirect('/login');
+    console.log("hala");
+  } else {
+    res.sendFile(path.join(__dirname + '/frontend/pages/landing.html'));
+    console.log("halalal");
   }
 })
 
+// Handle GET REQUEST localhost/login
 app.get('/login', function (req, res) {
   // if user has a valid session id then redirect to home
-  if(req.session.sessionId){
-  	res.redirect('/');
-  }else{
-  	res.sendFile(path.join(__dirname + '/frontend/pages/login-multi.html'));
+  if (req.session.sessionId) {
+    res.redirect('/');
+  } else {
+    res.sendFile(path.join(__dirname + '/frontend/pages/login-multi.html'));
   }
 })
 
-app.post('/login', function(req, res){
+// Handle POST REQUEST localhost/login
+app.post('/login', function (req, res) {
+
+  var randomID = Math.floor((Math.random() * 1000000) + 1);
+
   // login user
   let data = JSON.stringify(
-  {
-  	"action": "attemptLogin",
-  	"data": {
-  		"email": req.body.email,
-  		"password": req.body.password
-  	}
-  }
+    {
+      "randomID": randomID,
+      "action": "attemptLogin",
+      "data": {
+        "email": req.body.email,
+        "password": req.body.password
+      }
+    }
   );
-  // sendPostRequest(data,
-  //   function(result){
-  //     let jsonObject = JSON.parse(result);
-  //     if(jsonObject.response_status == 404){
-  //       res.send({redirect: '/login'}); // send errors lw 7abeb (user not found)
-  //     }else{
-  //       req.session.sessionId = jsonObject.sessionId;
-  //       req.session.userId = jsonObject.userId;
-  //       res.send({redirect: '/'});
-  //     }
-  // });
 
-  console.log(data);
+  publish("userApp", data);
 
-  amqp.connect('amqp://localhost:5673', function(err, conn) {
-  	conn.createChannel(function(err, ch) {
-  		var q = 'userApp';
-    // var msg = 'Hello World!';
-
-    ch.assertQueue(q, {durable: false});
-    // Note: on Node 6 Buffer.from(msg) should be used
-    ch.sendToQueue(q, new Buffer(data));
-    console.log(" [x] Sent %s", data);
-});
-  	setTimeout(function() { conn.close(); process.exit(0) }, 500);
+  amqp.connect('amqp://localhost:5673', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      var q = 'userAppResponse';
+      ch.assertQueue(q, { durable: false });
+      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+      ch.consume(q, function (msg) {
+        jsonObject = JSON.parse(msg.content.toString());
+        console.log(jsonObject);
+        if (jsonObject.randomID == randomID) {
+          console.log("match!!");
+          if (jsonObject.object.StatusID == "0") {
+            console.log("read session");
+            req.session.sessionId = jsonObject.object.responseData.sessionID;
+            res.send({ redirect: '/' });
+          }
+          else {
+            console.log("session");
+            res.send({ redirect: '/login' });
+          }
+          conn.close();
+        } else {
+          console.log("no");
+          publish(q, msg);
+        }
+      }, { noAck: true });
+    });
   });
 })
 
+// Handle POST REQUEST localhost/register
+app.post('/register', function (req, res) {
 
-function sendPostRequest (data, onSuccess, onError){
-	var options = {
-    hostname: '127.0.0.1', // load balancer
-    port: 5673,
-    path: '/java',
-    method: 'POST',
-    headers: {
-    	'Content-Type': 'application/json'
+  var randomID = Math.floor((Math.random() * 1000000) + 1);
+
+  // register user
+  let data = JSON.stringify(
+    {
+      "randomID": randomID,
+      "action": "addUser",
+      "data": {
+        "email": req.body.email,
+        "password": req.body.password,
+        "firstname": req.body.firstname,
+        "lastname": req.body.lastname
+      }
     }
-};
-var req = http.request(options, function(res) {
-	res.setEncoding('utf8');
-	res.on('data', function (body) {
-		onSuccess(body);
-	});
-});
-req.on('error', function(e) {
-	onError('problem with request: ' + e.message);
-});
-  // write data to request body
-  amqp.connect('amqp://localhost:5673', function(err, conn) {
-  	conn.createChannel(function(err, ch) {
-  		var q = 'userapp';
-    // var msg = 'Hello World!';
+  );
 
-    ch.assertQueue(q, {durable: false});
-    // Note: on Node 6 Buffer.from(msg) should be used
-    ch.sendToQueue(q, new Buffer(msg));
-    console.log(" [x] Sent %s", msg);
-});
-  	setTimeout(function() { conn.close(); process.exit(0) }, 500);
+  // Publish to userApp queue
+  amqp.connect('amqp://localhost:5673', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      var q = 'userApp';
+      ch.assertQueue(q, { durable: false });
+      ch.sendToQueue(q, new Buffer(data));
+    });
+    setTimeout(function () { conn.close(); process.exit(0) }, 500);
   });
-  req.write(data);
-  req.end();
-}
+
+  var receivedMessage;
+  while (receivedMessage == null) {
+    receivedMessage = inBoundMessages[randomID];
+  }
+
+  receivedJsonObject = JSON.parse(receivedMessage);
+
+  if (receivedJsonObject.status == "200") {
+    req.session.sessionId = receivedMessage.sessionId;
+    res.send({ redirect: '/' });
+  }
+  else {
+    res.send({ redirect: '/login' });
+  }
+})
