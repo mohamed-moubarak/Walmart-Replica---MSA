@@ -161,7 +161,7 @@ app.post('/register', function (req, res) {
 
 })
 
-// Handle POST REQUEST localhost/register
+// Handle POST REQUEST localhost/editinfo
 app.post('/editInfo', function (req, res) {
 
   var randomID = Math.floor((Math.random() * 1000000) + 1);
