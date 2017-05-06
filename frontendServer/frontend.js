@@ -94,6 +94,7 @@ app.post('/login', function (req, res) {
           if (jsonObject.object.StatusID == "0") {
             console.log("read session");
             req.session.sessionId = jsonObject.object.responseData.sessionID;
+            req.session.userId = jsonObject.object.responseData.userID;
             res.send({ redirect: '/' });
           }
           else {
@@ -141,7 +142,7 @@ app.post('/register', function (req, res) {
         console.log(jsonObject);
         if (jsonObject.randomID == randomID) {
           console.log("match!!");
-          if (jsonObject.object.StatusID == "0") {
+          if (jsonObject.object.StatusID != "-401") {
             console.log("read session");
             req.session.sessionId = jsonObject.object.responseData.sessionID;
             res.send({ redirect: '/' });
@@ -209,5 +210,53 @@ app.post('/editInfo', function (req, res) {
       }, { noAck: true });
     });
   });
-  
+
+})
+
+// Handle POST REQUEST localhost/fetchmessages
+app.post('/fetchmessages', function (req, res) {
+
+  var randomID = Math.floor((Math.random() * 1000000) + 1);
+
+  // register user
+  let data = JSON.stringify(
+    {
+      "randomID": randomID,
+      "action": "fetchMessages",
+      "data": {
+        "userID": req.session.userID
+      }
+    }
+  );
+
+  publish("messagesApp", data);
+
+  amqp.connect('amqp://localhost:5673', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      var q = 'messagesAppResponse';
+      ch.assertQueue(q, { durable: false });
+      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+      ch.consume(q, function (msg) {
+        jsonObject = JSON.parse(msg.content.toString());
+        console.log(jsonObject);
+        if (jsonObject.randomID == randomID) {
+          console.log("match!!");
+          if (jsonObject.object.StatusID != "-401") {
+            console.log("read session");
+            req.session.sessionId = jsonObject.object.responseData.sessionID;
+            res.send({ redirect: '/' });
+          }
+          else {
+            console.log("session");
+            res.send({ redirect: '/login' });
+          }
+          conn.close();
+        } else {
+          console.log("no");
+          publish(q, msg);
+        }
+      }, { noAck: true });
+    });
+  });
+
 })

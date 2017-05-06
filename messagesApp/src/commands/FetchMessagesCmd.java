@@ -53,9 +53,7 @@ public class FetchMessagesCmd extends Command implements Runnable {
 		StringBuffer strBuf = new StringBuffer();
 		strBuf.append(jsonData);
 
-		strbufResult =
-
-				makeJSONResponseEnvelope(200, null, strBuf);
+		strbufResult = makeJSONResponseEnvelope(200, null, strBuf);
 		// sqlProc.close();
 
 		return strbufResult;
