@@ -32,6 +32,7 @@ public class Controller implements ParseListener {
         try{
             String strAction;
             strAction = clientRequest.getAction( );
+<<<<<<< HEAD:src/controller/Controller.java
             if( strAction.equalsIgnoreCase( "attemptLogin" ) ||
                     strAction.equalsIgnoreCase( "addUserSimple" ) ||
                     strAction.equalsIgnoreCase( "listProducts" ) ||
@@ -39,8 +40,11 @@ public class Controller implements ParseListener {
                     strAction.equalsIgnoreCase( "updateStock" ) ||
                     strAction.equalsIgnoreCase( "decreaseStock" ) ||
                     strAction.equalsIgnoreCase( "editInfo" ) ){
+=======
+            if( strAction.equalsIgnoreCase( "searchProducts" ) ) {
+>>>>>>> search-app:search-app/src/controller/Controller.java
                 _dispatcher.dispatchRequest( clientHandle , clientRequest  );
-                    }
+            }
             else{
                 String strSessionID;
                 strSessionID = clientRequest.getSessionID( );
