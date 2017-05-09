@@ -1,0 +1,88 @@
+//- 
+  Use this file to configure the sidebar menu
+  Structure:
+    menu {
+      href: the link target location
+      icon: the class name of the icon 
+      active: 1 active | 0 inactive
+      S: submenu object with same structure like described above
+    }
+
+- var firstMenu = {}
+
+- firstMenu['Dashboard']                      = { href: "", icon: 'fa fa-dot-circle-o', active: 0, alert: "10", S: {} };
+- firstMenu['Dashboard']['S']['Default']      = { href: "dashboard.html", active: 0 };
+- firstMenu['Dashboard']['S']['User Profile'] = { href: "dashboard-profile.html", active: 0 };
+- firstMenu['Dashboard']['S']['Two Sidebar']  = { href: "dashboard-sidebar2.html", active: 0 };
+
+- firstMenu['Elements']                       = { href: "#", icon: 'fa fa-flask', active: 0, S: {} };
+- firstMenu['Elements']['S']['Panels']        = { href: "panels.html", active: 0 };
+- firstMenu['Elements']['S']['Portlets']      = { href: "portlets.html", active: 0};
+- firstMenu['Elements']['S']['Buttons']       = { href: "button.html", active: 0 };
+- firstMenu['Elements']['S']['Icons']         = { href: "icons.html", active: 0, alert: "+400" };
+- firstMenu['Elements']['S']['Notifications'] = { href: "notifications.html", active: 0 };
+- firstMenu['Elements']['S']['Typography']    = { href: "typo.html", active: 0 };
+- firstMenu['Elements']['S']['Grid']          = { href: "grid.html", active: 0 };
+- firstMenu['Elements']['S']['Grid Masonry']  = { href: "grid-masonry.html", active: 0};
+- firstMenu['Elements']['S']['Animations']    = { href: "animations.html", active: 0 };
+- firstMenu['Elements']['S']['Dropdown']      = { href: "dropdown-animations.html", active: 0 };
+- firstMenu['Elements']['S']['Widgets']       = { href: "widgets.html", active: 0 };
+- firstMenu['Elements']['S']['Spinners']      = { href: "spinners.html", active: 0};
+
+- firstMenu['Pages']                          = { href: "#", icon: 'fa fa-file-text-o', active: 0, S: {}};
+- firstMenu['Pages']['S']['Landing']          = { href: "pages/landing.html", active: 0 };
+- firstMenu['Pages']['S']['Login']            = { href: "pages/login.html", active: 0 };
+- firstMenu['Pages']['S']['Login Multi']      = { href: "pages/login-multi.html", active: 0 };
+- firstMenu['Pages']['S']['Sign up']          = { href: "pages/signup.html", active: 0 };
+- firstMenu['Pages']['S']['Lock']             = { href: "pages/lock.html", active: 0 };
+- firstMenu['Pages']['S']['Recover Password'] = { href: "pages/recover.html", active: 0 };
+- firstMenu['Pages']['S']['Empty Template']   = { href: "template.html", active: 0 };
+
+
+- var secondMenu = {}
+
+- secondMenu['Maps']                          = { href: "#", icon: 'fa fa-globe', active: 0, S: {}, alert: "new" };
+- secondMenu['Maps']['S']['Google Maps']      = { href: "maps-google.html", active: 0 };
+- secondMenu['Maps']['S']['Vector Maps']      = { href: "maps-vector.html", active: 0, alert: "new"  };
+
+- secondMenu['Charts']                        = { href: "#", icon: 'fa fa-area-chart', active: 0, S: {}, alert: "new"  };
+- secondMenu['Charts']['S']['Flot']           = { href: "chart-flot.html", active: 0 };
+- secondMenu['Charts']['S']['Radial']         = { href: "chart-radial.html", active: 0, alert: "new"  };
+
+- secondMenu['Tables']                        = { href: "#", icon: 'fa fa-table', active: 0, S: {} };
+- secondMenu['Tables']['S']['Data Table']     = { href: "table-datatable.html", active: 0};
+- secondMenu['Tables']['S']['Standard']       = { href: "table-standard.html", active: 0 };
+- secondMenu['Tables']['S']['Extended']       = { href: "table-extended.html", active: 0 };
+
+- secondMenu['Forms']                         = { href: "#", icon: 'fa fa-edit',  active: 0, S: {} };
+- secondMenu['Forms']['S']['Standard']        = { href: "form-standard.html", active: 0 };
+- secondMenu['Forms']['S']['Wizard']          = { href: "form-wizard.html", active: 0 };
+- secondMenu['Forms']['S']['Validation']      = { href: "form-validation.html", active: 0 };
+- secondMenu['Forms']['S']['Extended']        = { href: "form-extended.html", active: 0 };
+
+- secondMenu['Extras']                        = { href: "#", icon: 'fa fa-plus',  active: 0, S: {}, alert: "new"  };
+- secondMenu['Extras']['S']['Calendar']       = { href: "calendar.html", active: 0};
+- secondMenu['Extras']['S']['Timeline']       = { href: "timeline.html", active: 0 };
+- secondMenu['Extras']['S']['Search']         = { href: "search.html", active: 0 };
+- secondMenu['Extras']['S']['Invoice']        = { href: "invoice.html", active: 0 };
+- secondMenu['Extras']['S']['Mailbox']        = { href: "mailbox.html", active: 0 };
+- secondMenu['Extras']['S']['Filebox']        = { href: "filebox.html", active: 0, alert: "new"  };
+
+//- This mixin iterates over the configuration array 
+//- and prints the menu items
+mixin build-menu-items(items)
+  each val, key in items
+    li(class=val.active?'active':'')
+      - has_submenu = !!val.S
+      a(href=val.href, title=key, data-toggle=(has_submenu?"collapse-next":""), class=(has_submenu?"has-submenu":"no-submenu"))
+        if ( val.icon )
+          em(class=val.icon)
+        if ( val.alert )
+          .label.label-primary.pull-right= val.alert
+        span.item-text= key
+
+      if (has_submenu)
+        // START SubMenu item
+        ul(class="nav collapse " + (val.active?'in':''))
+          +build-menu-items(val.S)
+        // END SubMenu item

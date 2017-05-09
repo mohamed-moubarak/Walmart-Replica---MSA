@@ -1,0 +1,433 @@
+extends layout/main-layout
+
+block active-item
+  - firstMenu['Elements']['active'] = 1
+  - firstMenu['Elements']['S']['Widgets']['active'] = 1
+
+block content
+  
+  h3 Widgets
+    br
+    small Panel with combination of components in its purest form
+
+  // START row
+  .row
+    .col-lg-4
+      // START widget
+      .panel.widget
+        img.img-responsive(src="app/img/bg1.jpg", alt="Image")
+        .panel-body
+          .row.row-table.text-center
+            .col-xs-4
+              p Comments
+              h3.m0.text-primary 700
+            .col-xs-4
+              p Likes
+              h3.m0.text-primary 1500
+            .col-xs-4
+              p Shots
+              h3.m0.text-primary 300
+      // END widget
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .panel-body
+          .media.p.mt0
+            .pull-left
+              img.media-object.img-circle.thumb96(src='app/img/user/09.jpg', alt="Image")
+            .media-body
+              .media-heading
+                h3.mt0 Michael Morr
+                ul.list-unstyled
+                  li.mb-sm
+                    em.fa.fa-map-marker.fa-fw
+                    |  Nowhere, Neverland
+                  li.mb-sm
+                    em.fa.fa-twitter.fa-fw
+                    |  @michmorr
+                  li.mb-sm
+                    em.fa.fa-envelope.fa-fw
+                    |  michmorr@mail.com
+        .panel-body.bg-inverse
+          .row.row-table.text-center
+            .col-xs-4
+              p.m0.h3 700
+              p.m0.text-muted Followers
+            .col-xs-4
+              p.m0.h3 1500
+              p.m0.text-muted Following
+            .col-xs-4
+              p.m0.h3 510
+              p.m0.text-muted Loved
+      // END widget
+      // START widget
+      .panel.widget
+        .panel-body
+          .row.row-table
+            .col-xs-4.text-center
+              img.img-thumbnail.img-circle.img-responsive.thumb96(src="app/img/user/06.jpg", alt="Image")
+            .col-xs-8
+              .pull-right
+                a(href="#").btn.btn-success Follow
+              h3.mt0 Laura Stellar
+              p.text-muted 150 Following / 100 Followers
+      // END widget
+    .col-lg-4
+      .row
+        .col-sm-6
+          // START widget
+          .panel.widget
+            .panel-body.bg-info.text-center
+              .text-lg.m0 1202
+              p tweets
+              .mb-lg
+              em.fa.fa-twitter.text-alpha
+          // END widget
+        .col-sm-6
+          // START widget
+          .panel.widget
+            .panel-body.bg-warning.text-center
+              .text-lg.m0 19&deg;
+              p Amsterdam
+              .mb-lg
+              em.fa.fa-sun-o
+          // END widget
+      .row
+        .col-sm-6
+          // START widget
+          .panel.widget
+            .panel-body.bg-danger.text-center
+              .radial-bar.radial-bar-40.radial-bar.radial-bar-danger.m0
+                img(src="app/img/user/03.jpg",alt="")
+              p
+                strong 40% 
+                span complete
+          // END widget
+        .col-sm-6
+          // START widget
+          .panel.widget
+            .panel-body.bg-success.text-center
+              p: img.img-circle.thumb64(src='app/img/user/08.jpg',alt="")
+              p
+                strong Mia 
+                span is now following you
+          // END widget
+      .row
+      // START widget
+      .panel.widget
+        .panel-body
+          .row.row-table
+            .col-xs-3.text-center
+              img.img-thumbnail.img-circle.img-responsive.thumb64(src="app/img/user/06.jpg", alt="Image")
+            .col-xs-5.text-center
+              h3.m0 Laura Stellar
+            .col-xs-4
+              a(href="#").btn.btn-purple 
+                em.fa.fa-hand-o-right
+                span  Send a shot
+      // END widget
+  // END row
+  // START row
+  .row
+    .col-lg-3
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-4.bg-info.text-center
+            em.fa.fa-users.fa-2x
+          .col-xs-8
+            .panel-body.text-center
+              h4.mt0 10k
+              p.mb0.text-muted VISITORS
+      // END widget
+    .col-lg-3
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-4.bg-danger.text-center
+            em.fa.fa-music.fa-2x
+          .col-xs-8
+            .panel-body.text-center
+              h4.mt0 100%
+              p.mb0.text-muted VOLUME
+      // END widget
+    .col-lg-3
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-4.bg-inverse.text-center
+            em.fa.fa-code-fork.fa-2x
+          .col-xs-8
+            .panel-body.text-center
+              h4.mt0 150 
+              p.mb0.text-muted FORKS
+      // END widget
+    .col-lg-3
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-4.bg-green.text-center
+            em.fa.fa-inbox.fa-2x
+          .col-xs-8
+            .panel-body.text-center
+              h4.mt0 10
+              p.mb0.text-muted NEW MESSAGES
+      // END widget
+  // END row
+  // START row
+  .row
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .panel-body.bg-success
+          .h5.mt0 Received all time
+          // Line chart
+          span.inlinesparkline.sparkline(data-type='line', data-height='80', data-width='100%', data-line-width='2', data-line-color='#dddddd', data-spot-color='#bbbbbb', data-fill-color='', data-highlight-line-color='#fff', data-spot-radius='3', data-resize='true')
+            // 1,3,4,7,5,9,4,4,7,5,9,6,4
+          // Bar chart
+          .text-center
+            .inlinesparkline.inline(data-bar-color="#fff", data-height="50", data-bar-width="6", data-bar-spacing="6") 
+              | 1,3,4,7,5,9,4,4,7,5,9,6,4
+        .panel-body.bg-inverse
+          .row.row-table.text-center
+            .col-xs-4
+              p.m0.h3 15080
+              p.m0.text-muted Shot Views
+            .col-xs-4
+              p.m0.h3 12000
+              p.m0.text-muted Likes
+            .col-xs-4
+              p.m0.h3 5100
+              p.m0.text-muted Comments
+      // END widget
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .panel-body.bg-primary
+          .h5.mt0 Monthly incomes
+          // Line chart
+          .inlinesparkline.sparkline(data-type='line', data-height='80', data-width='100%', data-line-width='2', data-line-color='#dddddd', data-spot-color='#bbbbbb', data-fill-color='', data-highlight-line-color='#fff', data-spot-radius='3', data-resize='true')
+            // 1,3,4,7,5,9,4,4,7,5,9,6,4
+        .panel-body.bg-inverse
+          .row.text-center
+            .col-xs-6
+              // Bar chart
+              .inlinesparkline.inline(data-bar-color="primary", data-height="30", data-bar-width="6", data-bar-spacing="6") 
+                | 1,3,4,7,5,9,4,4,7,5,9,6,4
+            .col-xs-6
+              h4.m0 +150
+              p.m0.text-muted: small From last month
+        .panel-body
+          .row.row-table.text-center
+            .col-xs-6
+              .p
+                p.m0.text-muted Gross income
+                h4.m0 12000
+            .col-xs-6
+              .p
+                p.m0.text-muted Net income
+                h4.m0 5100
+      // END widget
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-8
+            img.img-responsive(src="app/img/bg1.jpg", alt="")
+          .col-xs-4.align-middle.bg-info
+            .text-center            
+              .text-lg.mt0 11&deg;
+              p Cold
+              em.fa.fa-sun-o.fa-2x
+      // END widget
+  // END row
+  // START row
+  .row
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-5
+            img.img-responsive(src="app/img/bg2.jpg", alt="")
+          .col-xs-7.align-middle.p-lg
+            .pull-right
+              a(href="#").btn.btn-primary.btn-sm Register
+            p
+              span.text-lg 16
+              | Aug
+            p: strong EVENT INVITATION
+            p Donec posuere neque in elit luctus tempor consequat enim egestas. Nulla dictum egestas leo at lobortis.
+      // END widget
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .panel-body.bg-green.text-center
+          .clearfix
+            .pull-left 200 Following
+            .pull-right 150 Followers
+          img.img-thumbnail.img-circle.thumb96(src="app/img/user/06.jpg", alt="Image")
+          h4.mt0 Sonia Cosmic
+          p.m0
+            em.fa.fa-fw.fa-map-marker
+            |  San Francisco, California
+          .clearfix
+            .pull-left 15k Likes
+            .pull-right 100 Feeds
+      // END widget
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .gmap.gmap-sm(data-zoom='14', data-address='Melbourne, Australia', data-toggle="gmap")
+        .panel-body.bg-purple
+          .row.row-table
+            .col-xs-6
+              .h2.m0 Meet Us!
+            .col-xs-1
+              em.fa.fa-map-marker.fa-3x
+            .col-xs-5
+              p.m0 Street 123
+              p.m0 Melbourne, Australia
+      // END widget
+  // END row
+  // START row
+  .row
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-6.bb.br
+            .row.row-table.row-flush
+              .col-xs-4.text-center.text-info
+                em.fa.fa-users.fa-2x
+              .col-xs-8
+                .panel-body.text-center
+                  h4.mt0 10k
+                  p.mb0.text-muted VISITORS
+          .col-xs-6.bb
+            .row.row-table.row-flush
+              .col-xs-4.text-center.text-danger
+                em.fa.fa-music.fa-2x
+              .col-xs-8
+                .panel-body.text-center
+                  h4.mt0 100%
+                  p.mb0.text-muted VOLUME
+
+        .row.row-table.row-flush
+          .col-xs-6.br
+            .row.row-table.row-flush
+              .col-xs-4.text-center.text-inverse
+                em.fa.fa-code-fork.fa-2x
+              .col-xs-8
+                .panel-body.text-center
+                  h4.mt0 150 
+                  p.mb0.text-muted FORKS
+          .col-xs-6
+            .row.row-table.row-flush
+              .col-xs-4.text-center.text-success
+                em.fa.fa-inbox.fa-2x
+              .col-xs-8
+                .panel-body.text-center
+                  h4.mt0 10
+                  p.mb0.text-muted NEW MESSAGES
+      // END widget
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-6.bb.br
+            .row.row-table.row-flush
+              .col-xs-4.text-center.text-info
+                // Bar chart
+                .inlinesparkline.inline(data-bar-color="primary", data-height="20", data-bar-width="3", data-bar-spacing="2") 
+                  | 5,9,4,1,3,4,7,5
+              .col-xs-8
+                .panel-body.text-center
+                  h4.mt0 10k
+                  p.mb0.text-muted VISITORS
+          .col-xs-6.bb
+            .row.row-table.row-flush
+              .col-xs-4.text-center.text-danger
+                // Bar chart
+                .inlinesparkline.inline(data-bar-color="primary", data-height="20", data-bar-width="3", data-bar-spacing="2") 
+                  | 1,2,3,4,5,6,7,8,9
+              .col-xs-8
+                .panel-body.text-center
+                  h4.mt0 100%
+                  p.mb0.text-muted CONVERSIONS
+
+        .row.row-table.row-flush
+          .col-xs-6.br
+            .row.row-table.row-flush
+              .col-xs-4.text-center.text-inverse
+                // Bar chart
+                .inlinesparkline.inline(data-bar-color="primary", data-height="20", data-bar-width="3", data-bar-spacing="2") 
+                  | 1,0,4,9,5,7,8,4,7
+              .col-xs-8
+                .panel-body.text-center
+                  h4.mt0 150 
+                  p.mb0.text-muted RETURNS
+          .col-xs-6
+            .row.row-table.row-flush
+              .col-xs-4.text-center.text-success
+                // Bar chart
+                .inlinesparkline.inline(data-bar-color="primary", data-height="20", data-bar-width="3", data-bar-spacing="2") 
+                  | 1,5,2,2,8,4,4,8
+              .col-xs-8
+                .panel-body.text-center
+                  h4.mt0 10
+                  p.mb0.text-muted UNIQUES
+      // END widget
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .half-float
+          img.img-responsive(src="app/img/bg3.jpg",alt="")
+          .half-float-bottom
+            img.img-thumbnail.img-circle.thumb128(src='app/img/user/09.jpg', alt="Image")
+        .panel-body.text-center
+          h3.m0 Steve Works
+          p.text-muted Creative Director
+          p Proin metus justo, commodo in ultrices at, lobortis sit amet dui. Fusce dolor purus, adipiscing a tempus at, gravida vel purus. 
+        .panel-body.text-center.bg-gray-lighter
+          .row.row-table
+            .col-xs-4
+              h3.m0 700
+              p.m0 Following
+            .col-xs-4
+              h3.m0 1500
+              p.m0 Likes
+            .col-xs-4
+              h3.m0 300
+              p.m0 Photos
+      // END widget
+    .col-lg-4
+      // START widget
+      .panel.widget
+        .panel-body.text-center.bg-center(style="background-image: url('app/img/bg4.jpg')")
+          .row.row-table
+            .col-xs-12.text-white
+              img.img-thumbnail.img-circle.thumb128(src='app/img/user/06.jpg', alt="Image")
+              h3.m0 Lila
+              p.m0
+                em.fa.fa-twitter.fa-fw
+                |  @lilaflow
+
+        .panel-body.text-center.bg-gray-darker
+          .row.row-table
+            .col-xs-4
+              a(href="#").text-white: em.fa.fa-user.fa-2x
+            .col-xs-4
+              a(href="#").text-white: em.fa.fa-heart.fa-2x
+            .col-xs-4
+              a(href="#").text-white: em.fa.fa-comments.fa-2x
+        .list-group
+          a(href="#").list-group-item
+            em.fa.fa-fw.fa-clock-o.text-muted
+            |  Recent Activity
+          a(href="#").list-group-item
+            em.fa.fa-fw.fa-user.text-muted
+            |  Following
+          a(href="#").list-group-item
+            em.fa.fa-fw.fa-folder-open-o.text-muted
+            |  Photos
+      // END widget
+  // END row
