@@ -75,7 +75,7 @@ public class Dispatcher {
 	}
 
 	public void init() throws Exception {
-		loadHikari("localhost", 5432, "walmartpostgreSQLDB", "postgres", "Mhmm4241");
+		loadHikari("localhost", 5432, "walmartpostgreSQLDB", "postgres", "");
 		loadThreadPool();
 		loadCommands();
 	}
